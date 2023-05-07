@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".RegisterActivity"
+        android:background="@drawable/green"
+        tools:ignore="ExtraText">
+
+
+        <TextView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign Up"
+            android:textColor="@color/white"
+            android:textSize="34sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.064" />
+
+        <EditText
+            android:id="@+id/inputUsername"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/input_bg"
+            android:drawableLeft="@drawable/ic_person"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="Username"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:textColor="@color/design_default_color_background"
+            android:textColorHint="@color/design_default_color_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logo" />
+
+        <EditText
+            android:id="@+id/inputEmailRegister"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/input_bg"
+            android:drawableLeft="@drawable/ic_email"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="Email"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:text="Email"
+            android:textColor="@color/design_default_color_background"
+            android:textColorHint="@color/design_default_color_background"
+            app:layout_constraintEnd_toEndOf="@+id/inputUsername"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inputUsername"
+            tools:ignore="VisualLintTextFieldSize" />
+
+        <EditText
+            android:id="@+id/inputPasswordRegister"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/input_bg"
+            android:drawableLeft="@drawable/ic_security"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="****"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:text="****"
+            android:textColor="@color/design_default_color_background"
+            android:textColorHint="@color/design_default_color_background"
+            app:layout_constraintEnd_toEndOf="@+id/inputEmailRegister"
+            app:layout_constraintStart_toStartOf="@+id/inputUsername"
+            app:layout_constraintTop_toBottomOf="@+id/inputEmailRegister" />
+
+        <EditText
+            android:id="@+id/inputConformPasswordRegister"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/input_bg"
+            android:drawableLeft="@drawable/ic_security"
+            android:drawablePadding="10dp"
+            android:ems="10"
+            android:hint="****"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:text="****"
+            android:textColor="@color/design_default_color_background"
+            android:textColorHint="@color/design_default_color_background"
+            app:layout_constraintEnd_toEndOf="@+id/inputPasswordRegister"
+            app:layout_constraintStart_toStartOf="@+id/inputPasswordRegister"
+            app:layout_constraintTop_toBottomOf="@+id/inputPasswordRegister" />
+
+        <EditText
+            android:id="@+id/inputGröße"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/input_bg"
+            android:hint="Größe in cm"
+            android:textColorHint="@color/white"
+            android:inputType="numberDecimal"
+            android:minHeight="48dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            app:layout_constraintEnd_toEndOf="@+id/inputConformPasswordRegister"
+            app:layout_constraintStart_toStartOf="@+id/inputConformPasswordRegister"
+            app:layout_constraintTop_toBottomOf="@+id/inputConformPasswordRegister" />
+
+        <EditText
+            android:id="@+id/inputGewicht"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/input_bg"
+            android:hint="Gewicht in kg"
+            android:inputType="numberDecimal"
+            android:minHeight="48dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:textColorHint="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/inputGröße"
+            app:layout_constraintTop_toBottomOf="@+id/inputGröße" />
+
+        <TextView
+            android:id="@+id/inputGeburtsdatum"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Geburtsdatum auswählen"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/inputGewicht"
+            app:layout_constraintStart_toStartOf="@+id/inputGewicht"
+            app:layout_constraintTop_toBottomOf="@+id/inputGewicht" />
+
+        <DatePicker
+            android:id="@+id/datePicker"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner"
+            android:spinnersShown="true"
+            app:layout_constraintEnd_toEndOf="@+id/inputGeburtsdatum"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/inputGeburtsdatum"
+            app:layout_constraintTop_toBottomOf="@+id/inputGeburtsdatum" />
+
+        <TextView
+            android:id="@+id/textViewGeschlecht"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Geschlecht auswählen"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@+id/datePicker"
+            app:layout_constraintStart_toStartOf="@+id/datePicker"
+            app:layout_constraintTop_toBottomOf="@+id/datePicker" />
+
+        <RadioGroup
+            android:id="@+id/genderRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/textViewGeschlecht"
+            app:layout_constraintStart_toStartOf="@+id/textViewGeschlecht"
+            app:layout_constraintTop_toBottomOf="@+id/textViewGeschlecht">
+
+            <RadioButton
+                android:id="@+id/maleRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Männlich"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
+
+            <RadioButton
+                android:id="@+id/femaleRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Weiblich"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
+
+            <RadioButton
+                android:id="@+id/otherRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Andere"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/bmiTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="BMI anzeigen lassen"
+            android:textColor="@color/teal_200"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@+id/genderRadioGroup"
+            app:layout_constraintStart_toStartOf="@+id/genderRadioGroup"
+            app:layout_constraintTop_toBottomOf="@+id/genderRadioGroup"/>
+
+
+        <EditText
+            android:id="@+id/inputKaloriengrenze"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="100dp"
+            android:background="@drawable/input_bg"
+            android:hint="Kaloriengrenze eingeben"
+            android:inputType="numberDecimal"
+            android:minHeight="48dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:textColorHint="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/bmiTextView"
+            app:layout_constraintStart_toStartOf="@+id/bmiTextView"
+            app:layout_constraintTop_toBottomOf="@+id/bmiTextView" />
+
+        <Button
+            android:id="@+id/buttonInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/shape_round"
+            android:text="Info"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@+id/inputKaloriengrenze"
+            app:layout_constraintTop_toTopOf="@+id/inputKaloriengrenze" />
+
+        <Button
+            android:id="@+id/buttonRegister"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70dp"
+            android:backgroundTint="#4CAF50"
+            android:fontFamily="sans-serif-black"
+            android:shadowColor="@color/design_default_color_background"
+            android:text="Sign Up"
+            android:textColor="@color/design_default_color_background"
+            android:textColorHint="@color/design_default_color_background"
+            app:layout_constraintEnd_toEndOf="@+id/bmiTextView"
+            app:layout_constraintStart_toStartOf="@+id/bmiTextView"
+            app:layout_constraintTop_toBottomOf="@+id/bmiTextView" />
+
+        <TextView
+            android:id="@+id/alreadyHaveAnAccount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:text="Do you already have an Account?"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold|italic"
+            app:layout_constraintEnd_toEndOf="@+id/buttonRegister"
+            app:layout_constraintStart_toStartOf="@+id/buttonRegister"
+            app:layout_constraintTop_toBottomOf="@+id/buttonRegister" />
+
+        <Button
+            android:id="@+id/loginRegister"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#4CAF50"
+            android:fontFamily="sans-serif-black"
+            android:text="Login"
+            android:textColor="@color/design_default_color_background"
+            android:textColorHint="@color/design_default_color_background"
+            app:layout_constraintEnd_toEndOf="@+id/alreadyHaveAnAccount"
+            app:layout_constraintStart_toStartOf="@+id/alreadyHaveAnAccount"
+            app:layout_constraintTop_toBottomOf="@+id/alreadyHaveAnAccount"/>
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
+

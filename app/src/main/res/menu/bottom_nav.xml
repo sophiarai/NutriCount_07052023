@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Food"
+        android:id="@+id/bottom_food"
+        android:enabled="true"
+        android:icon="@drawable/ic_food"/>
+
+    <item android:title="Sport"
+        android:id="@+id/bottom_sport"
+        android:enabled="true"
+        android:icon="@drawable/ic_sport"/>
+
+    <item android:title="Home"
+        android:id="@+id/bottom_home"
+        android:enabled="true"
+        android:icon="@drawable/ic_home"/>
+
+    <item android:title="Notes"
+        android:id="@+id/bottom_notes"
+        android:enabled="true"
+        android:icon="@drawable/ic_notes"/>
+
+</menu>
