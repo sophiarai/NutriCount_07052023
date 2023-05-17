@@ -1,3 +1,24 @@
 <resources>
-    <string name="app_name">NutriCount_07052023</string>
+    <string name="app_name" translatable="false">NutriCount_07052023</string>
+    <string name="welcome_to_nutricount">Welcome to NutriCount!</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="login">Login</string>
+    <string name="don_t_have_an_account">Don´t have an Account?</string>
+    <string name="sign_up2">Sign Up</string>
+    <string name="username2">Username</string>
+    <string name="email" translatable="false">Email</string>
+    <string name="password2" translatable="false">****</string>
+    <string name="password3" translatable="false">****</string>
+    <string name="sign_up3">Sign Up</string>
+    <string name="do_you_already_have_an_account">Do you already have an Account?</string>
+    <string name="login2">Login</string>
+    <string name="select_sport">Select Sport</string>
+    <string name="date">Date</string>
+    <string name="select_today_s_date">Select today\'s date</string>
+
+
+
 </resources>

@@ -5,26 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".InfoActivity"
-    android:background="@drawable/green">
+    android:background="@drawable/background">
 
     <ListView
         android:id="@+id/listView"
         android:layout_width="409dp"
-        android:layout_height="665dp"
+        android:layout_height="300dp"
         android:layout_marginStart="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.242" />
+        app:layout_constraintVertical_bias="0.052"
+        />
+
     <Button
         android:id="@+id/myButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:drawableLeft="@drawable/ic_arrowback"
         android:textColor="#FFFFFF"
-        android:text="Zurück"
+        android:backgroundTint="@color/green"
+        android:text="Back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />

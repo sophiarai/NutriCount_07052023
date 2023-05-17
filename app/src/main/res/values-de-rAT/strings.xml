@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="welcome_to_nutricount">Willkommen zu NoutriCount</string>
+    <string name="sign_up">Anmelden</string>
+    <string name="password">Passwort</string>
+    <string name="username">Benutzername</string>
+    <string name="forgot_password">Passwort vergessen?</string>
+    <string name="login">Einloggen</string>
+    <string name="don_t_have_an_account">Haben Sie noch keinen Account?</string>
+    <string name="sign_up2">Anmelden</string>
+    <string name="sign_up3">Anmelden</string>
+    <string name="do_you_already_have_an_account">Haben Sie bereits ein Konto?</string>
+    <string name="login2">Einloggen</string>
+    <string name="username2">Benutzername</string>
+    <string name="select_sport">Wähle Sportarten aus</string>
+    <string name="date">Datum</string>
+    <string name="select_today_s_date">Wähle das heutige Datum aus</string>
+
+
+</resources>

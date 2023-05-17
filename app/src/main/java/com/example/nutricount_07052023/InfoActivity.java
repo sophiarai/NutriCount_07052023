@@ -12,10 +12,11 @@ import android.widget.ListView;
 public class InfoActivity extends AppCompatActivity {
 
 
-    String bmilist [] = {"<= 16,0 :     starkes Untergewicht", "16,0-17,0 :     mäßiges Untergewicht", "17,0-18,5 :     leichtes Untergewicht",
-            "18,5-25,0 :    NormalGewicht", "25,0-30,0 :    Präadipositas", "30,0-35,0 :    Adipositas Grad 1",
-            "35,0-40,0 :    Adipositas Grad 2", ">=40,0 :   Adipositas Grad 3", " ", " ",
-            "Kalorienbedarf berechnen->", };
+    String bmilist [] = {"  <= 16,0 :     severely underweight", "  16,0-17,0 :     moderately underweight", "  17,0-18,5 :     leichtes Untergewicht",
+            "  18,5-25,0 :    normal weight", "  25,0-30,0 :    pre-obesity", "  30,0-35,0 :    Grade 1 obesity",
+            "  35,0-40,0 :    Grade 2 obesity", "  >=40,0 :   Grade 3 obesity",};
+
+
     ListView listView;
     Button button;
 
@@ -23,6 +24,8 @@ public class InfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
+
+
 
         listView=(ListView) findViewById(R.id.listView);
         ArrayAdapter<String>arrayAdapter=new ArrayAdapter<String>(this, R.layout.activity_list_view, R.id.textView_listView,bmilist);
@@ -32,7 +35,7 @@ public class InfoActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(InfoActivity.this, RegisterActivity.class);
+                Intent intent= new Intent(InfoActivity.this, PersonalActivity.class);
                 startActivity(intent);
             }});
 
