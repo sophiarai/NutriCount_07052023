@@ -7,35 +7,7 @@
     tools:context=".FoodActivity"
     android:background="@drawable/background">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select today's date"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:paddingLeft="20dp"
-        android:paddingTop="20dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/textView_date"/>
-    <Button
-        android:id="@+id/button_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/textView_date"
-        android:backgroundTint="#4CAF50"
-        android:text="Date" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView_date2"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:layout_centerHorizontal="true"
-        android:textStyle="bold"
-        android:layout_below="@+id/button_date"/>
+
 
 
 
@@ -49,8 +21,8 @@
         android:layout_marginEnd="16dp"
         app:cardCornerRadius="5dp"
         app:cardElevation="10dp"
-        android:layout_marginTop="20sp"
-        android:layout_below="@id/textView_date2">
+        android:layout_marginTop="70sp"
+        android:layout_alignParentTop="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -161,6 +133,7 @@
         android:backgroundTint="@color/green"
         android:drawableLeft="@drawable/ic_camera"
         android:drawablePadding="10dp"
+        android:textColor="@color/white"
         android:text="Scan"
         android:textSize="20dp"
         android:textStyle="bold" />

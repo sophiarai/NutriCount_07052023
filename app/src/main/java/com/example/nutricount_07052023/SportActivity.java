@@ -50,23 +50,6 @@ public class SportActivity extends AppCompatActivity {
         });
 
 
-        //Datum auswählen:
-        textViewDate=(TextView)findViewById(R.id.textView_date2);
-        btndate=(Button)findViewById(R.id.button_date);
-        btndate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Calendar kalender= Calendar.getInstance();
-                SimpleDateFormat datumsFormat= new SimpleDateFormat("dd.MM.yyyy");
-                textViewDate.setText(datumsFormat.format(kalender.getTime()));
-            }
-        });
-
-
-
-
-
-
 
         //BottomNavigation wird in SportActivity angezeigt:
         BottomNavigationView bottomNavigationView=findViewById(R.id.bottomNavigationView);
@@ -161,6 +144,6 @@ public class SportActivity extends AppCompatActivity {
     }
 
 
-
+//aller letzte Klammer
 
 }

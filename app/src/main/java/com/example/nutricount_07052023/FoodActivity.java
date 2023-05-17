@@ -75,15 +75,15 @@ public class FoodActivity extends AppCompatActivity {
 
 
         //Heutiges Datum anzeigen lassen
-        textViewDate = (TextView) findViewById(R.id.textView_date2);
-        btndate = (Button) findViewById(R.id.button_date);
-        btndate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Calendar kalender= Calendar.getInstance();
-                SimpleDateFormat datumsFormat=new SimpleDateFormat("dd.MM.yyyy");
-                textViewDate.setText(datumsFormat.format(kalender.getTime()));
-            }});
+        //textViewDate = (TextView) findViewById(R.id.textView_date2);
+       // btndate = (Button) findViewById(R.id.button_date);
+       // btndate.setOnClickListener(new View.OnClickListener() {
+            //@Override
+            //public void onClick(View view) {
+               // Calendar kalender= Calendar.getInstance();
+                //SimpleDateFormat datumsFormat=new SimpleDateFormat("dd.MM.yyyy");
+                //textViewDate.setText(datumsFormat.format(kalender.getTime()));
+            //}});
 
 
 
