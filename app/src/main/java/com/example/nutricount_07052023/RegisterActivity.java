@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+
 public class RegisterActivity extends AppCompatActivity {
 
     public Button buttonregister, buttonlogin, buttoninfo;
