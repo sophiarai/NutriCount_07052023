@@ -4,11 +4,23 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 public class NotesActivity extends AppCompatActivity {
+
+    private ListView notes_listView;
+    private NotesAdapter notesAdapter;
+    private List<Note> notesList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +52,16 @@ public class NotesActivity extends AppCompatActivity {
             }
             return false;
         });
+
+        notes_listView = findViewById(R.id.notes_listView);
+
+        notesList = new ArrayList<>();
+
+       notesAdapter = new NotesAdapter(this, notesList);
+        notes_listView.setAdapter((ListAdapter) notesAdapter);
+
+        notesList.add(new Note(new Date(), "Kalorien Gesamt"+"400" ,"Verbrannte Kalorien: "+"150", "Gegessene Kalorien: "+"250"));
+        notesList.add(new Note(new Date(), "Kalorien Gesamt"+"380" ,"Verbrannte Kalorien: "+"200", "Gegessene Kalorien: "+"180"));
 
 
 
