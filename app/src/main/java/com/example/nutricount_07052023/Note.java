@@ -5,13 +5,13 @@ import java.util.Date;
 
 public class Note {
 
-    private Date date;
+    private String date;
 
     private String allCalories;
     private String burnedCalories;
     private String consumedCalories;
 
-    public Note(Date date,String allCalories, String burnedCalories, String consumedCalories) {
+    public Note(String date,String allCalories, String burnedCalories, String consumedCalories) {
         this.date = date;
         this.allCalories = allCalories;
         this.burnedCalories = burnedCalories;
@@ -34,11 +34,11 @@ public class Note {
         this.consumedCalories = consumedCalories;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

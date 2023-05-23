@@ -12,6 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -60,8 +61,12 @@ public class NotesActivity extends AppCompatActivity {
        notesAdapter = new NotesAdapter(this, notesList);
         notes_listView.setAdapter((ListAdapter) notesAdapter);
 
-        notesList.add(new Note(new Date(), "Kalorien Gesamt"+"400" ,"Verbrannte Kalorien: "+"150", "Gegessene Kalorien: "+"250"));
-        notesList.add(new Note(new Date(), "Kalorien Gesamt"+"380" ,"Verbrannte Kalorien: "+"200", "Gegessene Kalorien: "+"180"));
+        //Datum
+        Calendar kalender = Calendar.getInstance();
+        SimpleDateFormat datumsFormat = new SimpleDateFormat("dd.MM.yyyy");
+        String datum = datumsFormat.format(kalender.getTime());
+
+        notesList.add(new Note(datum, "Kalorien Gesamt: "+"400" ,"Verbrannte Kalorien: "+"150", "Gegessene Kalorien: "+"250"));
 
 
 

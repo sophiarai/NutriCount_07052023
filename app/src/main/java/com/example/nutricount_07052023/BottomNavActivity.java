@@ -65,6 +65,10 @@ ImageButton imageButtonPersonal, imageButtonLogout;
 
                  // Ergebnis anzeigen
                  diffTextView.setText("Total gained calories: " + result);
+
+                 if (result >= 1000) {
+                     showAlertTotalCalories();
+                 }
              }});
 
 
@@ -175,6 +179,14 @@ ImageButton imageButtonPersonal, imageButtonLogout;
         alertDialog.setNegativeButton("No", null);
         alertDialog.show();
 }
+
+    private void showAlertTotalCalories(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("Warnung!");
+        alertDialog.setMessage("Achtung! Sie befinden sich über dem täglichen Kalorienbedarf");
+        alertDialog.setPositiveButton("Verstanden", null);
+        alertDialog.show();
+    }
 
 //letzte Klammer
 }

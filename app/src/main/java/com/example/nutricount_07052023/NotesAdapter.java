@@ -34,11 +34,13 @@ public class NotesAdapter extends ArrayAdapter {
         Note currentNote = (Note) getItem(position);
 
         // Zeigen Sie die Eintragswerte in den entsprechenden Views an
+        TextView allCaloriesTextView = convertView.findViewById(R.id.textView_notes_allCalories);
         TextView burnedCaloriesTextView = convertView.findViewById(R.id.textView_notes_burnedCalories);
         TextView consumedCaloriesTextView = convertView.findViewById(R.id.textView_notes_consumedCalories);
         TextView dateTextView = convertView.findViewById(R.id.textView_notes_date);
 
         if (currentNote != null) {
+            allCaloriesTextView.setText(String.valueOf(currentNote.getAllCalories()));
             burnedCaloriesTextView.setText(String.valueOf(currentNote.getBurnedCalories()));
             consumedCaloriesTextView.setText(String.valueOf(currentNote.getConsumedCalories()));
             dateTextView.setText(currentNote.getDate().toString());
