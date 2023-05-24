@@ -121,7 +121,6 @@
             android:backgroundTint="@color/green"
             android:text="submit"
             android:textSize="11dp"
-            android:textColor="@color/white"
             android:textStyle="bold"
             tools:ignore="TextSizeCheck" />
     </RadioGroup>

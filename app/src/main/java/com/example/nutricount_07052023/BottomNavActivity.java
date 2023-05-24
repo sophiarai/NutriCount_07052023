@@ -26,65 +26,63 @@ public class BottomNavActivity extends AppCompatActivity {
     Button btn_date, btn_submit;
     TextView textView_datum, textView_welcome, bottomNavTotalCaloriesTextView, bottomNavTotalLostCalories;
 
-ImageButton imageButtonPersonal, imageButtonLogout;
+    ImageButton imageButtonPersonal, imageButtonLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_nav);
 
-        btn_submit=findViewById(R.id.buttonsubmit);
-        diffTextView=findViewById(R.id.textViewDifference);
+        bottomNavTotalLostCalories = findViewById(R.id.textViewTrySport);
+        bottomNavTotalCaloriesTextView = findViewById(R.id.textViewTryFood);
+        btn_submit = findViewById(R.id.buttonsubmit);
+        diffTextView = findViewById(R.id.textViewDifference);
 
         // Gesamtkalorien (gained) aus den SharedPreferences abrufen und anzeigen
-         bottomNavTotalCaloriesTextView = findViewById(R.id.textViewTryFood);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int totalCalories = sharedPreferences.getInt("totalCalories", 0);
         bottomNavTotalCaloriesTextView.setText("Gained calories: " + totalCalories);
 
         // Gesamtkalorien (lost) aus den SharedPreferences abrufen und anzeigen
-         bottomNavTotalLostCalories= findViewById(R.id.textViewTrySport);
-         SharedPreferences sharedPreferences1=PreferenceManager.getDefaultSharedPreferences(this);
-         int totalCalories2= sharedPreferences1.getInt("totalCalories2", 0);
-         bottomNavTotalLostCalories.setText("Lost calories: "+ totalCalories2);
+        int totalCaloriesLost = sharedPreferences.getInt("total_calories_sport", 0);
+        bottomNavTotalLostCalories.setText("Lost calories: " + totalCaloriesLost);
 
-         btn_submit.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                 // Gesamtkalorien (gained) aus den SharedPreferences abrufen
-                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BottomNavActivity.this);
-                 int gainedCalories = sharedPreferences.getInt("totalCalories", 0);
+        // Überprüfen, ob ein übergebener Kalorienwert vorhanden ist
+        if (getIntent().hasExtra("totalCaloriesSport")) {
+            int totalCaloriesSport = getIntent().getIntExtra("totalCaloriesSport", 0);
+            bottomNavTotalLostCalories.setText("Lost calories: " + totalCaloriesSport);
 
-                 // Gesamtkalorien (lost) aus den SharedPreferences abrufen
-                 SharedPreferences sharedPreferences1 = PreferenceManager.getDefaultSharedPreferences(BottomNavActivity.this);
-                 int lostCalories = sharedPreferences1.getInt("totalCalories2", 0);
+            // Speichern des übergebenen Kalorienwerts in den SharedPreferences
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("total_calories_sport", totalCaloriesSport);
+            editor.apply();
+        }
+        btn_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Gesamtkalorien (gained) aus den SharedPreferences abrufen
+                int gainedCalories = sharedPreferences.getInt("totalCalories", 0);
 
-                 // Differenz berechnen
-                 int result = gainedCalories - lostCalories;
+                // Gesamtkalorien (lost) aus den SharedPreferences abrufen
+                int lostCalories = sharedPreferences.getInt("total_calories_sport", 0);
 
-                 // Ergebnis anzeigen
-                 diffTextView.setText("Total gained calories: " + result);
-             }});
+                // Differenz berechnen
+                int result = gainedCalories - lostCalories;
 
+                // Ergebnis anzeigen
+                diffTextView.setText("Total gained calories: " + result);
+            }
+        });
 
-        imageButtonLogout=(ImageButton)findViewById(R.id.imageButton_logout);
+        imageButtonLogout = findViewById(R.id.imageButton_logout);
 
-
-        String username=getIntent().getStringExtra("USERNAME");
-        textView_welcome= (TextView) findViewById(R.id.welcome_message);
-        textView_welcome.setText("Welcome "+username+"!");
-
-
-        String username2=getIntent().getStringExtra("username");
-        textView_welcome= (TextView) findViewById(R.id.welcome_message);
-        textView_welcome.setText("Welcome "+username2+"!");
-
-
+        String username = getIntent().getStringExtra("USERNAME");
+        textView_welcome = findViewById(R.id.welcome_message);
+        textView_welcome.setText("Welcome " + username + "!");
 
         //Heutiges Datum anzeigen lassen
-        textView_datum = (TextView) findViewById(R.id.textView_date2);
-        btn_date = (Button) findViewById(R.id.button_date);
-
+        textView_datum = findViewById(R.id.textView_date2);
+        btn_date = findViewById(R.id.button_date);
         btn_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,39 +92,20 @@ ImageButton imageButtonPersonal, imageButtonLogout;
             }
         });
 
-
-        //TextView burnedKcalTextView = findViewById(R.id.textViewTrySport);
-        //int burned_Calories = BurnedCalories.getInstance().getBurnedCalories();
-       // burnedKcalTextView.setText(String.format("Burned calories: %d kcal", burned_Calories));
-
-
-       // TextView gainedKcalTextView = findViewById(R.id.textViewTryFood);
-        //int gained_calories = GainedCalories.getInstance().getGainedCalories();
-        //gainedKcalTextView.setText(String.format("Gained calories: %d kcal", gained_calories));
-
-        //int netto_kalorien = gained_calories - burned_Calories;
-       // diffTextView = (TextView)findViewById(R.id.textViewDifference);
-        //diffTextView.setText(String.format("Netto-Kalorien: %d kcal", netto_kalorien));
-
-
-
-
-        imageButtonPersonal=(ImageButton) findViewById(R.id.btnPersonal);
+        imageButtonPersonal = findViewById(R.id.btnPersonal);
         imageButtonPersonal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent (BottomNavActivity.this, PersonalActivity.class);
+                Intent intent = new Intent(BottomNavActivity.this, PersonalActivity.class);
                 startActivity(intent);
             }
         });
 
-
-
-        BottomNavigationView bottomNavigationView=findViewById(R.id.bottomNavigationView);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.bottom_home);
 
-        bottomNavigationView.setOnItemSelectedListener(item->{
-            switch (item.getItemId()){
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()) {
                 case R.id.bottom_home:
                     return true;
                 case R.id.bottom_sport:
@@ -154,11 +133,8 @@ ImageButton imageButtonPersonal, imageButtonLogout;
                 showLogoutDialog();
             }
         });
-
-
-
-
     }
+
     private void showLogoutDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("LogOut");
@@ -173,7 +149,5 @@ ImageButton imageButtonPersonal, imageButtonLogout;
         });
         alertDialog.setNegativeButton("No", null);
         alertDialog.show();
-}
-
-//letzte Klammer
+    }
 }

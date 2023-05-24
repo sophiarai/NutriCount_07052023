@@ -7,11 +7,6 @@
     tools:context=".FoodActivity"
     android:background="@drawable/background">
 
-
-
-
-
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/selectCard"
         android:layout_width="match_parent"
@@ -21,8 +16,7 @@
         android:layout_marginEnd="16dp"
         app:cardCornerRadius="5dp"
         app:cardElevation="10dp"
-        android:layout_marginTop="70sp"
-        android:layout_alignParentTop="true">
+        android:layout_marginTop="80dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -44,7 +38,6 @@
                 android:layout_centerInParent="true"
                 android:src="@drawable/ic_arrow_down" />
         </RelativeLayout>
-
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
@@ -56,7 +49,7 @@
         android:layout_marginEnd="16dp"
         app:cardCornerRadius="5dp"
         app:cardElevation="10dp"
-        android:layout_marginTop="15sp"
+        android:layout_marginTop="15dp"
         android:layout_below="@id/selectCard">
 
         <RelativeLayout
@@ -79,7 +72,6 @@
                 android:layout_centerInParent="true"
                 android:src="@drawable/ic_arrow_down" />
         </RelativeLayout>
-
     </com.google.android.material.card.MaterialCardView>
 
     <TextView
@@ -93,9 +85,7 @@
         android:textSize="20sp"
         android:layout_below="@id/selectCardsMeal"
         android:textColor="@color/white"
-        android:textStyle="bold"
-        />
-
+        android:textStyle="bold" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
@@ -109,9 +99,7 @@
         android:layout_marginTop="30dp"
         android:elevation="2dp"
         app:menu="@menu/bottom_nav"
-        app:itemIconSize="30dp"
-
-        />
+        app:itemIconSize="30dp" />
 
     <TextView
         android:id="@+id/kcal_textview"
@@ -133,10 +121,8 @@
         android:backgroundTint="@color/green"
         android:drawableLeft="@drawable/ic_camera"
         android:drawablePadding="10dp"
-        android:textColor="@color/white"
         android:text="Scan"
         android:textSize="20dp"
         android:textStyle="bold" />
-
 
 </RelativeLayout>
