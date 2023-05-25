@@ -25,7 +25,7 @@ public class BottomNavActivity extends AppCompatActivity {
     TextView diffTextView;
     Button btn_date, btn_submit;
     TextView textView_datum, textView_welcome, bottomNavTotalCaloriesTextView, bottomNavTotalLostCalories;
-
+    private static final String DATE_PREF_KEY = "current_date";
     ImageButton imageButtonPersonal, imageButtonLogout;
 
     @Override
@@ -33,10 +33,16 @@ public class BottomNavActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_nav);
 
+        //Welcome Message (von Login Activity)
+        String username = getIntent().getStringExtra("USERNAME");
+        textView_welcome = findViewById(R.id.welcome_message);
+        textView_welcome.setText("Welcome " + username + "!");
+
         bottomNavTotalLostCalories = findViewById(R.id.textViewTrySport);
         bottomNavTotalCaloriesTextView = findViewById(R.id.textViewTryFood);
         btn_submit = findViewById(R.id.buttonsubmit);
         diffTextView = findViewById(R.id.textViewDifference);
+
 
         // Gesamtkalorien (gained) aus den SharedPreferences abrufen und anzeigen
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -76,22 +82,30 @@ public class BottomNavActivity extends AppCompatActivity {
 
         imageButtonLogout = findViewById(R.id.imageButton_logout);
 
-        String username = getIntent().getStringExtra("USERNAME");
-        textView_welcome = findViewById(R.id.welcome_message);
-        textView_welcome.setText("Welcome " + username + "!");
 
+        // Datum aus den SharedPreferences abrufen
+        textView_datum = findViewById(R.id.textView_date2); // Vorher initialisieren
+        String currentDate = sharedPreferences.getString(DATE_PREF_KEY, "");
+        if (!currentDate.isEmpty()) {
+            textView_datum.setText(currentDate);
+        }
         //Heutiges Datum anzeigen lassen
-        textView_datum = findViewById(R.id.textView_date2);
         btn_date = findViewById(R.id.button_date);
         btn_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Calendar kalender = Calendar.getInstance();
                 SimpleDateFormat datumsFormat = new SimpleDateFormat("dd.MM.yyyy");
-                textView_datum.setText(datumsFormat.format(kalender.getTime()));
+                String formattedDate = datumsFormat.format(kalender.getTime());
+
+                // Datum in den SharedPreferences speichern
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(DATE_PREF_KEY, formattedDate);
+                editor.apply();
+
+                textView_datum.setText(formattedDate);
             }
         });
-
         imageButtonPersonal = findViewById(R.id.btnPersonal);
         imageButtonPersonal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,6 +140,7 @@ public class BottomNavActivity extends AppCompatActivity {
             }
             return false;
         });
+
 
         imageButtonLogout.setOnClickListener(new View.OnClickListener() {
             @Override

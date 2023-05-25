@@ -73,7 +73,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         public void run() {
                                             Toast.makeText(RegisterActivity.this, "Registered successfully", Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(RegisterActivity.this, BottomNavActivity.class);
-                                            intent.putExtra("username", user); // Übergebe den Benutzernamen an die Intent
+                                            intent.putExtra("USERNAME", user); // Übergebe den Benutzernamen an die Intent
                                             startActivity(intent);
                                         }
                                     });

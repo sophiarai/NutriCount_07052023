@@ -46,17 +46,14 @@ public class SportActivity extends AppCompatActivity {
     private SportDao sportDao;
     private List<SportEntity> sports;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sport);
 
-        textViewkcalSport=findViewById(R.id.kcal_sport);
-        selectCardSport=findViewById(R.id.selectCardSport);
-        textViewSport=findViewById(R.id.tvSport);
+        textViewkcalSport = findViewById(R.id.kcal_sport);
+        selectCardSport = findViewById(R.id.selectCardSport);
+        textViewSport = findViewById(R.id.tvSport);
 
         // Room Database initialisieren
         database = Room.databaseBuilder(getApplicationContext(), SportDatabase.class, "app-db")
@@ -64,7 +61,6 @@ public class SportActivity extends AppCompatActivity {
                 .build();
         sportDao = database.sportDao();
         sports = sportDao.getAllSports();
-
 
         if (sports == null || sports.isEmpty()) {
             SportManager sportManager = new SportManager();
@@ -75,8 +71,7 @@ public class SportActivity extends AppCompatActivity {
             }
             sports = sportDao.getAllSports();
         }
-        selectedsport= new boolean[sports.size()];
-
+        selectedsport = new boolean[sports.size()];
 
         selectCardSport.setOnClickListener(view -> {
             showSportDialog();
@@ -89,15 +84,12 @@ public class SportActivity extends AppCompatActivity {
         textViewSport.setText(sharedPreferences.getString(PREF_TEXT_VIEW_SPORT, ""));
         textViewkcalSport.setText("Lost calories: " + totalCalories);
 
-
-
-
-        //BottomNavigation wird in SportActivity angezeigt:
-        BottomNavigationView bottomNavigationView=findViewById(R.id.bottomNavigationView);
+        // BottomNavigation wird in SportActivity angezeigt:
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.bottom_sport);
 
-        bottomNavigationView.setOnItemSelectedListener(item->{
-            switch (item.getItemId()){
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()) {
                 case R.id.bottom_home:
                     startActivity(new Intent(getApplicationContext(), BottomNavActivity.class));
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
@@ -118,8 +110,8 @@ public class SportActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
 
-}
     private void showSportDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(SportActivity.this);
         builder.setTitle("Select Food");
@@ -165,10 +157,8 @@ public class SportActivity extends AppCompatActivity {
                     textViewSport.setText(stringBuilder.toString());
                     updateTotalCalories();
                 }
-                Intent intent = new Intent(getApplicationContext(), BottomNavActivity.class);
-                intent.putExtra("totalCaloriesSport", totalCalories);
-                //startActivity(intent)
-                ;}
+                dialogInterface.dismiss();
+            }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int which) {
@@ -185,6 +175,7 @@ public class SportActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
     private void updateTotalCalories() {
         int totalCalories2 = calculateTotalCalories();
         textViewkcalSport.setText("Lost calories: " + totalCalories2);
@@ -197,8 +188,8 @@ public class SportActivity extends AppCompatActivity {
         editor.apply();
 
         totalCalories = totalCalories2;
-
     }
+
     private int calculateTotalCalories() {
         int totalCalories = 0;
         for (int sportIndex : selectedSportsList) {
@@ -235,8 +226,11 @@ public class SportActivity extends AppCompatActivity {
         if (selectedSportsList != null) {
             for (int sportIndex : selectedSportsList) {
                 if (sportIndex >= 0 && sportIndex < selectedsport.length) {
-        selectedsport[sportIndex] = true;
-               }}}}
+                    selectedsport[sportIndex] = true;
+                }
+            }
+        }
+    }
 
     private ArrayList<Integer> getSelectedSportsListFromPrefs(SharedPreferences sharedPreferences) {
         String selectedSportsJson = sharedPreferences.getString(PREF_SELECTED_SPORTS, null);
@@ -255,6 +249,7 @@ public class SportActivity extends AppCompatActivity {
         }
         return new ArrayList<>();
     }
+
     private String convertListToString(ArrayList<Integer> list) {
         JSONArray jsonArray = new JSONArray();
         for (Integer item : list) {
@@ -263,6 +258,5 @@ public class SportActivity extends AppCompatActivity {
         return jsonArray.toString();
     }
 
-
-//aller letzte Klammer
+    //letzte Klammer
 }

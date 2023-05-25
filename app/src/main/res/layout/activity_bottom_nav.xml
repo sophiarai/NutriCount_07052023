@@ -76,7 +76,7 @@
         android:layout_below="@id/textViewTrySport"
         android:layout_centerInParent="true"
         android:layout_marginTop="0dp"
-        android:text="-------------------------------------"
+        android:text="------------------------------------"
         android:textColor="@color/white"
         android:textSize="25sp"
         android:textStyle="bold" />
@@ -152,9 +152,8 @@
         android:id="@+id/welcome_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
         android:textColor="@color/white"
-        android:textStyle="bold"
+        android:textStyle="bold|italic"
         android:textSize="24sp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"/>
@@ -163,9 +162,8 @@
         android:id="@+id/welcome_message2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
         android:textColor="@color/white"
-        android:textStyle="bold"
+        android:textStyle="bold|italic"
         android:textSize="24sp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"/>
