@@ -19,9 +19,9 @@
         android:hint="Größe in cm"
         android:inputType="numberDecimal"
         android:minHeight="48dp"
-        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         android:textColorHint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -29,7 +29,9 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.026" />
+        app:layout_constraintVertical_bias="0.026"
+        android:autofillHints=""
+        tools:ignore="VisualLintTextFieldSize" />
 
     <EditText
         android:id="@+id/inputGewicht"
@@ -41,15 +43,17 @@
         android:hint="Gewicht in kg"
         android:inputType="numberDecimal"
         android:minHeight="48dp"
-        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         android:textColorHint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/inputGröße"
-        app:layout_constraintTop_toBottomOf="@+id/inputGröße" />
+        app:layout_constraintTop_toBottomOf="@+id/inputGröße"
+        tools:ignore="VisualLintTextFieldSize"
+        android:autofillHints="" />
 
     <TextView
         android:id="@+id/inputGeburtsdatum"
@@ -120,9 +124,9 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/green"
             android:text="submit"
-            android:textSize="11dp"
+            android:textSize="11sp"
             android:textStyle="bold"
-            tools:ignore="TextSizeCheck" />
+            tools:ignore="TextSizeCheck,TouchTargetSizeCheck,VisualLintBounds" />
     </RadioGroup>
 
     <TextView
@@ -148,14 +152,16 @@
         android:hint="calorie limit"
         android:inputType="numberDecimal"
         android:minHeight="48dp"
-        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         android:textColorHint="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/bmiTextView"
         app:layout_constraintStart_toStartOf="@+id/bmiTextView"
-        app:layout_constraintTop_toBottomOf="@+id/bmiTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/bmiTextView"
+        android:autofillHints=""
+        tools:ignore="VisualLintTextFieldSize" />
 
     <Button
         android:id="@+id/buttonInfo"
@@ -164,6 +170,7 @@
         android:layout_marginStart="8dp"
         android:backgroundTint="@color/green"
         android:text="Info"
+        android:drawableEnd="@drawable/ic_info"
         android:textStyle="bold"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -193,7 +200,7 @@
         android:layout_marginTop="8dp"
         android:backgroundTint="@color/green"
         android:text="calories"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:textStyle="bold"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"

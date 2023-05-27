@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -23,29 +24,31 @@ import java.util.Calendar;
 
 public class BottomNavActivity extends AppCompatActivity {
     TextView diffTextView;
-    Button btn_date, btn_submit;
+    Button  btn_submit;
     TextView textView_datum, textView_welcome, bottomNavTotalCaloriesTextView, bottomNavTotalLostCalories;
     private static final String DATE_PREF_KEY = "current_date";
     ImageButton imageButtonPersonal, imageButtonLogout;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_nav);
 
-        //Welcome Message (von Login Activity)
+        // Welcome Message
         String username = getIntent().getStringExtra("USERNAME");
         textView_welcome = findViewById(R.id.welcome_message);
         textView_welcome.setText("Welcome " + username + "!");
+
+        // Willkommensnachricht aus den SharedPreferences abrufen und anzeigen
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         bottomNavTotalLostCalories = findViewById(R.id.textViewTrySport);
         bottomNavTotalCaloriesTextView = findViewById(R.id.textViewTryFood);
         btn_submit = findViewById(R.id.buttonsubmit);
         diffTextView = findViewById(R.id.textViewDifference);
 
-
         // Gesamtkalorien (gained) aus den SharedPreferences abrufen und anzeigen
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int totalCalories = sharedPreferences.getInt("totalCalories", 0);
         bottomNavTotalCaloriesTextView.setText("Gained calories: " + totalCalories);
 
@@ -82,30 +85,25 @@ public class BottomNavActivity extends AppCompatActivity {
 
         imageButtonLogout = findViewById(R.id.imageButton_logout);
 
-
         // Datum aus den SharedPreferences abrufen
         textView_datum = findViewById(R.id.textView_date2); // Vorher initialisieren
         String currentDate = sharedPreferences.getString(DATE_PREF_KEY, "");
         if (!currentDate.isEmpty()) {
             textView_datum.setText(currentDate);
+        } else {
+            // Heutiges Datum anzeigen lassen
+            Calendar kalender = Calendar.getInstance();
+            SimpleDateFormat datumsFormat = new SimpleDateFormat("dd.MM.yyyy");
+            String formattedDate = datumsFormat.format(kalender.getTime());
+
+            // Datum in den SharedPreferences speichern
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(DATE_PREF_KEY, formattedDate);
+            editor.apply();
+
+            textView_datum.setText(formattedDate);
         }
-        //Heutiges Datum anzeigen lassen
-        btn_date = findViewById(R.id.button_date);
-        btn_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Calendar kalender = Calendar.getInstance();
-                SimpleDateFormat datumsFormat = new SimpleDateFormat("dd.MM.yyyy");
-                String formattedDate = datumsFormat.format(kalender.getTime());
 
-                // Datum in den SharedPreferences speichern
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(DATE_PREF_KEY, formattedDate);
-                editor.apply();
-
-                textView_datum.setText(formattedDate);
-            }
-        });
         imageButtonPersonal = findViewById(R.id.btnPersonal);
         imageButtonPersonal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,7 +139,6 @@ public class BottomNavActivity extends AppCompatActivity {
             return false;
         });
 
-
         imageButtonLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -165,4 +162,6 @@ public class BottomNavActivity extends AppCompatActivity {
         alertDialog.setNegativeButton("No", null);
         alertDialog.show();
     }
+
+
 }

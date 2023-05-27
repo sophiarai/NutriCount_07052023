@@ -16,7 +16,7 @@
         android:layout_marginEnd="16dp"
         app:cardCornerRadius="5dp"
         app:cardElevation="10dp"
-        android:layout_marginTop="80dp">
+        android:layout_marginTop="100dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -101,16 +101,6 @@
         app:menu="@menu/bottom_nav"
         app:itemIconSize="30dp" />
 
-    <TextView
-        android:id="@+id/kcal_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textViewFood"
-        android:layout_centerInParent="true"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="25sp" />
-
     <Button
         android:id="@+id/buttonScanner"
         android:layout_width="wrap_content"
@@ -122,7 +112,36 @@
         android:drawableLeft="@drawable/ic_camera"
         android:drawablePadding="10dp"
         android:text="Scan"
+        android:textColor="@color/white"
         android:textSize="20dp"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/kcal_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/buttonScanner"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="25sp"
+         />
+    <ImageButton
+        android:id="@+id/btnPersonal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/app_name"
+        android:minHeight="48dp"
+        app:srcCompat="@drawable/ic_personblack"
+        tools:ignore="DuplicateSpeakableTextCheck" />
+
+    <ImageButton
+        android:id="@+id/imageButton_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnPersonal"
+        android:contentDescription="@string/app_name"
+        android:minHeight="48dp"
+        app:srcCompat="@drawable/ic_logout" />
 
 </RelativeLayout>

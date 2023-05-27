@@ -3,63 +3,80 @@ package com.example.nutricount_07052023;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
-
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import com.example.nutricount_07052023.Database.SportDao;
 import com.example.nutricount_07052023.Database.SportDatabase;
 import com.example.nutricount_07052023.Database.SportEntity;
 import com.example.nutricount_07052023.Database.SportManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
-public class SportActivity extends AppCompatActivity {
+
+
+public class SportActivity extends AppCompatActivity implements SensorEventListener {
 
     private static final String PREF_SELECTED_SPORTS = "selected_sports";
     private static final String PREF_TOTAL_CALORIES_SPORT = "total_calories_sport";
     private static final String PREF_TEXT_VIEW_SPORT = "text_view_sport";
     private ArrayList<Integer> selectedSportsList;
     private int totalCalories;
-    TextView textViewSport, textViewkcalSport;
+    TextView textViewSport, textViewkcalSport, textViewSteps;
+    Button btnResetSteps;
+    ImageButton imageButtonLogout, imageButtonPersonal;
     MaterialCardView selectCardSport;
     boolean[] selectedsport;
-    private SportDatabase database;
-    private SportDao sportDao;
     private List<SportEntity> sports;
+
+    private SensorManager sensorManager;
+    private boolean running = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sport);
 
+        imageButtonLogout=findViewById(R.id.imageButton_logout);
+        imageButtonPersonal = findViewById(R.id.btnPersonal);
+
+        btnResetSteps = findViewById(R.id.button_steps);
+        textViewSteps = findViewById(R.id.tv_stepsTaken);
+
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        if (countSensor == null) {
+            Toast.makeText(this, "This device does not support step counting.", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "This device does support step counting.", Toast.LENGTH_SHORT).show();
+        }
+        btnResetSteps.setOnClickListener(view -> resetSteps());
+
         textViewkcalSport = findViewById(R.id.kcal_sport);
         selectCardSport = findViewById(R.id.selectCardSport);
         textViewSport = findViewById(R.id.tvSport);
 
         // Room Database initialisieren
-        database = Room.databaseBuilder(getApplicationContext(), SportDatabase.class, "app-db")
+        SportDatabase database = Room.databaseBuilder(getApplicationContext(), SportDatabase.class, "app-db")
                 .allowMainThreadQueries()
                 .build();
-        sportDao = database.sportDao();
+        SportDao sportDao = database.sportDao();
         sports = sportDao.getAllSports();
 
         if (sports == null || sports.isEmpty()) {
@@ -73,9 +90,7 @@ public class SportActivity extends AppCompatActivity {
         }
         selectedsport = new boolean[sports.size()];
 
-        selectCardSport.setOnClickListener(view -> {
-            showSportDialog();
-        });
+        selectCardSport.setOnClickListener(view -> showSportDialog());
 
         // Wiederherstellen der gespeicherten Daten aus SharedPreferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -83,6 +98,15 @@ public class SportActivity extends AppCompatActivity {
         totalCalories = sharedPreferences.getInt(PREF_TOTAL_CALORIES_SPORT, 0);
         textViewSport.setText(sharedPreferences.getString(PREF_TEXT_VIEW_SPORT, ""));
         textViewkcalSport.setText("Lost calories: " + totalCalories);
+
+
+        imageButtonPersonal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SportActivity.this, PersonalActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // BottomNavigation wird in SportActivity angezeigt:
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -110,6 +134,28 @@ public class SportActivity extends AppCompatActivity {
             }
             return false;
         });
+
+        imageButtonLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLogoutDialog();
+            }
+        });
+    }
+    private void showLogoutDialog() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("LogOut");
+        alertDialog.setMessage("Do you really want to Logout?");
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(SportActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        alertDialog.setNegativeButton("No", null);
+        alertDialog.show();
     }
 
     private void showSportDialog() {
@@ -131,46 +177,32 @@ public class SportActivity extends AppCompatActivity {
             }
         }
 
-        builder.setMultiChoiceItems(sportArray, selectedSports, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
-                if (isChecked) {
-                    if (!selectedSportsList.contains(which)) {
-                        selectedSportsList.add(which);
-                    }
-                } else {
-                    selectedSportsList.remove(Integer.valueOf(which));
+        builder.setMultiChoiceItems(sportArray, selectedSports, (dialogInterface, which, isChecked) -> {
+            if (isChecked) {
+                if (!selectedSportsList.contains(which)) {
+                    selectedSportsList.add(which);
                 }
+            } else {
+                selectedSportsList.remove(Integer.valueOf(which));
             }
-        }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                StringBuilder stringBuilder = new StringBuilder();
-                for (int i = 0; i < selectedSportsList.size(); i++) {
-                    int sportIndex = selectedSportsList.get(i);
-                    stringBuilder.append(sportArray[sportIndex]);
+        }).setPositiveButton("OK", (dialogInterface, which) -> {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < selectedSportsList.size(); i++) {
+                int sportIndex = selectedSportsList.get(i);
+                stringBuilder.append(sportArray[sportIndex]);
 
-                    if (i != selectedSportsList.size() - 1) {
-                        //when i value not equal to food list, then add comma
-                        stringBuilder.append(", ");
-                    }
-                    textViewSport.setText(stringBuilder.toString());
-                    updateTotalCalories();
+                if (i != selectedSportsList.size() - 1) {
+                    //when i value not equal to food list, then add comma
+                    stringBuilder.append(", ");
                 }
-                dialogInterface.dismiss();
-            }
-        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                dialogInterface.dismiss();
-            }
-        }).setNeutralButton("Clear all", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                selectedSportsList.clear();
-                textViewSport.setText("");
+                textViewSport.setText(stringBuilder.toString());
                 updateTotalCalories();
             }
+            dialogInterface.dismiss();
+        }).setNegativeButton("Cancel", (dialogInterface, which) -> dialogInterface.dismiss()).setNeutralButton("Clear all", (dialogInterface, which) -> {
+            selectedSportsList.clear();
+            textViewSport.setText("");
+            updateTotalCalories();
         });
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -195,12 +227,21 @@ public class SportActivity extends AppCompatActivity {
         for (int sportIndex : selectedSportsList) {
             totalCalories += sports.get(sportIndex).getCalories();
         }
+        // Anzahl der Schritte abrufen und in die Kalorienberechnung einbeziehen
+        int stepCount = Integer.parseInt(textViewSteps.getText().toString());
+        int caloriesPerStep = 0; // Setze hier den Kalorienverbrauch pro Schritt
+        int caloriesFromSteps = stepCount * caloriesPerStep;
+        // Addiere Kalorienverbrauch aus den Schritten zu den Gesamtkalorien
+        totalCalories += caloriesFromSteps;
+
         return totalCalories;
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        running=false;
+        sensorManager.unregisterListener(this);
 
         // Speichern des aktuellen Zustands in SharedPreferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -210,10 +251,16 @@ public class SportActivity extends AppCompatActivity {
         editor.putString(PREF_TEXT_VIEW_SPORT, textViewSport.getText().toString());
         editor.apply();
     }
-
     @Override
     protected void onResume() {
         super.onResume();
+        running=true;
+        Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        if (countSensor != null) {
+            sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
+        } else {
+            Toast.makeText(this, "Sensor not found!", Toast.LENGTH_SHORT).show();
+        }
 
         // Wiederherstellen des gespeicherten Zustands aus SharedPreferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -222,14 +269,13 @@ public class SportActivity extends AppCompatActivity {
         textViewSport.setText(sharedPreferences.getString(PREF_TEXT_VIEW_SPORT, ""));
         textViewkcalSport.setText("Lost calories: " + totalCalories);
 
+
         // Aktualisiert den Zustand der ausgewählten Sportarten im Dialogfenster
         if (selectedSportsList != null) {
             for (int sportIndex : selectedSportsList) {
                 if (sportIndex >= 0 && sportIndex < selectedsport.length) {
                     selectedsport[sportIndex] = true;
-                }
-            }
-        }
+                }}}
     }
 
     private ArrayList<Integer> getSelectedSportsListFromPrefs(SharedPreferences sharedPreferences) {
@@ -239,8 +285,7 @@ public class SportActivity extends AppCompatActivity {
                 JSONArray jsonArray = new JSONArray(selectedSportsJson);
                 ArrayList<Integer> selectedSportsList = new ArrayList<>();
                 for (int i = 0; i < jsonArray.length(); i++) {
-                    int sportIndex = jsonArray.getInt(i);
-                    selectedSportsList.add(sportIndex);
+                    selectedSportsList.add(jsonArray.getInt(i));
                 }
                 return selectedSportsList;
             } catch (JSONException e) {
@@ -250,7 +295,7 @@ public class SportActivity extends AppCompatActivity {
         return new ArrayList<>();
     }
 
-    private String convertListToString(ArrayList<Integer> list) {
+    private String convertListToString(List<Integer> list) {
         JSONArray jsonArray = new JSONArray();
         for (Integer item : list) {
             jsonArray.put(item);
@@ -258,5 +303,20 @@ public class SportActivity extends AppCompatActivity {
         return jsonArray.toString();
     }
 
-    //letzte Klammer
+    private void resetSteps() {
+        textViewSteps.setText("0");
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // Hier kann entsprechend auf Veränderungen der Genauigkeit reagiert werden
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (running) {
+            textViewSteps.setText(String.valueOf(event.values[0]));
+            updateTotalCalories();
+        }
+    }
 }

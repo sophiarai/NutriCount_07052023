@@ -15,6 +15,7 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.nutricount_07052023.Database.FoodDao;
@@ -36,6 +37,7 @@ import java.util.Set;
 
 public class FoodActivity extends AppCompatActivity {
     Button btnScan;
+    ImageButton imageButtonLogout, imageButtonPersonal;
     TextView textViewFruit, textViewMeals, textViewCalories;
     MaterialCardView  selectCardMeals, selectCards;
     boolean[] selectedFruits, selectedMeals;
@@ -48,6 +50,7 @@ public class FoodActivity extends AppCompatActivity {
     private static final String PREF_TOTAL_CALORIES_FOOD="total:calories_food";
    // private static final String PREF_TEXT_VIEW_FRUIT = "text_view_fruit";
    //private static final String PREF_TEXT_VIEW_MEALS = "text_view_meals";
+   private static final int REQUEST_CODE_SCAN = 1;
 
     Set<String> selectedFruitsSet;
     Set<String> selectedMealsSet;
@@ -64,6 +67,8 @@ public class FoodActivity extends AppCompatActivity {
         textViewFruit = findViewById(R.id.tvFood);
         textViewMeals = findViewById(R.id.tvMeals);
         textViewCalories = findViewById(R.id.kcal_textview);
+        imageButtonLogout=findViewById(R.id.imageButton_logout);
+        imageButtonPersonal = findViewById(R.id.btnPersonal);
 
         foodManager = new FoodManager();
 
@@ -104,6 +109,14 @@ public class FoodActivity extends AppCompatActivity {
             }
         });
 
+        imageButtonPersonal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FoodActivity.this, PersonalActivity.class);
+                startActivity(intent);
+            }
+        });
+
         // BottomNav in Activity anzeigen
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.bottom_food);
@@ -130,7 +143,29 @@ public class FoodActivity extends AppCompatActivity {
             }
             return false;
         });
+        imageButtonLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLogoutDialog();
+            }
+        });
     }
+    private void showLogoutDialog() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("LogOut");
+        alertDialog.setMessage("Do you really want to Logout?");
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(FoodActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        alertDialog.setNegativeButton("No", null);
+        alertDialog.show();
+    }
+
 
     private void scanCode() {
         ScanOptions options = new ScanOptions();

@@ -38,9 +38,9 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginTop="20dp"
-        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         android:text="Today´s gained calories"
         android:textColor="@color/white"
@@ -59,14 +59,15 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="0dp"
         android:layout_toStartOf="@id/textViewTryFood"
-        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         android:text="Today´s lost calories"
         android:textColor="@color/white"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:ignore="TextSizeCheck" />
 
 
     <TextView
@@ -88,15 +89,13 @@
         android:layout_below="@id/textViewTrennen"
         android:layout_centerInParent="true"
         android:layout_marginTop="5dp"
-        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold" />
-
-
 
 
     <ImageButton
@@ -105,7 +104,8 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/app_name"
         android:minHeight="48dp"
-        app:srcCompat="@drawable/ic_personblack" />
+        app:srcCompat="@drawable/ic_personblack"
+        tools:ignore="DuplicateSpeakableTextCheck" />
 
     <ImageButton
         android:id="@+id/imageButton_logout"
@@ -114,7 +114,7 @@
         android:layout_below="@id/btnPersonal"
         android:contentDescription="@string/app_name"
         android:minHeight="48dp"
-        app:srcCompat="@drawable/ic_noperson" />
+        app:srcCompat="@drawable/ic_logout" />
 
 
     <TextView
@@ -124,29 +124,23 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="70dp"
         android:layout_alignParentTop="false"
-        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
         android:paddingTop="20dp"
-        android:text="Select today's date"
+        android:text="Today's date:"
         android:textColor="@color/white"
         android:textSize="20sp"
-        android:textStyle="bold" />
-    <Button
-        android:id="@+id/button_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/textView_date"
-        android:backgroundTint="#4CAF50"
-        android:text="Date" />
+        android:textStyle="bold"
+        tools:ignore="RtlSymmetry" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView_date2"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="30sp"
         android:layout_centerHorizontal="true"
-        android:textStyle="bold"
-        android:layout_below="@+id/button_date"/>
+        android:textStyle="bold|italic"
+        android:layout_below="@+id/textView_date"/>
 
     <TextView
         android:id="@+id/welcome_message"
@@ -175,6 +169,7 @@
         android:layout_below="@id/textViewDifference"
         android:layout_centerInParent="true"
         android:layout_marginTop="0dp"
+        android:textColor="@color/white"
         android:backgroundTint="@color/green"
         android:text="Submit"
         android:textStyle="bold" />

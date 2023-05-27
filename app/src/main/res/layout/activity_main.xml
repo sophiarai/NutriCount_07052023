@@ -30,21 +30,24 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/input_bg"
-        android:drawableLeft="@drawable/ic_security"
+        android:drawableStart="@drawable/ic_security"
         android:drawablePadding="10dp"
         android:ems="10"
         android:hint="@string/password"
         android:minHeight="48dp"
-        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputusername" />
+        app:layout_constraintTop_toBottomOf="@+id/inputusername"
+        android:autofillHints=""
+        tools:ignore="VisualLintTextFieldSize"
+        />
 
     <EditText
         android:id="@+id/inputusername"
@@ -52,36 +55,39 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
         android:background="@drawable/input_bg"
-        android:drawableLeft="@drawable/ic_person"
+        android:drawableStart="@drawable/ic_person"
         android:drawablePadding="10dp"
         android:ems="10"
         android:hint="@string/username"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/inputPassword"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/inputPassword"
-        app:layout_constraintTop_toBottomOf="@+id/logo" />
-
+        app:layout_constraintTop_toBottomOf="@+id/logo"
+        android:autofillHints=""
+        tools:ignore="VisualLintTextFieldSize" />
 
 
     <Button
         android:id="@+id/btnlogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:backgroundTint="#4CAF50"
         android:text="@string/login"
-        android:layout_marginTop="30dp"
         android:textColor="@color/design_default_color_background"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/inputPassword"
         app:layout_constraintStart_toStartOf="@+id/inputPassword"
-        app:layout_constraintTop_toBottomOf="@+id/inputPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/inputPassword"
+        tools:ignore="DuplicateSpeakableTextCheck,VisualLintButtonSize" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -123,11 +129,13 @@
         android:layout_marginTop="8dp"
         android:backgroundTint="#4CAF50"
         android:text="@string/sign_up"
+        android:textStyle="bold"
         android:textColor="@color/design_default_color_background"
         app:layout_constraintEnd_toEndOf="@+id/linearLayout"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/linearLayout"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        tools:ignore="VisualLintButtonSize" />
 
     <TextView
         android:id="@+id/welcome"
@@ -138,6 +146,7 @@
         android:backgroundTint="#4CAF50"
         android:gravity="center"
         android:text="@string/welcome_to_nutricount"
+        android:textStyle="bold|italic"
         android:textColor="@color/white"
         android:textSize="25sp"
         android:typeface="serif"
