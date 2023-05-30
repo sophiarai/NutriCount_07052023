@@ -7,9 +7,6 @@
     tools:context=".BottomNavActivity"
     android:background="@drawable/background">
 
-
-
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -77,7 +74,7 @@
         android:layout_below="@id/textViewTrySport"
         android:layout_centerInParent="true"
         android:layout_marginTop="0dp"
-        android:text="------------------------------------"
+        android:text="---------------------------------"
         android:textColor="@color/white"
         android:textSize="25sp"
         android:textStyle="bold" />
@@ -116,7 +113,7 @@
         android:minHeight="48dp"
         app:srcCompat="@drawable/ic_logout" />
 
-
+<!--
     <TextView
         android:id="@+id/textView_date"
         android:layout_width="wrap_content"
@@ -141,6 +138,33 @@
         android:layout_centerHorizontal="true"
         android:textStyle="bold|italic"
         android:layout_below="@+id/textView_date"/>
+-->
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/dateInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        app:boxBackgroundColor="@color/green"
+        android:hint="Select Date"
+        android:textColorHint="@color/white"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/dateEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_arrow_down"
+            android:drawableLeft="@drawable/ic_date"
+            android:focusable="false"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
 
     <TextView
         android:id="@+id/welcome_message"
@@ -152,15 +176,7 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"/>
 
-    <TextView
-        android:id="@+id/welcome_message2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:textStyle="bold|italic"
-        android:textSize="24sp"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"/>
+
 
     <Button
         android:id="@+id/buttonsubmit"

@@ -8,15 +8,105 @@
     android:background="@drawable/background">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/selectCard"
+        android:id="@+id/selectCardsBreakfast"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="50dp"
         app:cardBackgroundColor="@color/green"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         app:cardCornerRadius="5dp"
         app:cardElevation="10dp"
         android:layout_marginTop="100dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvBreakfast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:hint="Select Breakfast"
+                android:textColorHint="@color/white"
+                android:textStyle="bold"
+                tools:ignore="RelativeOverlap" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_arrow_down"
+                android:contentDescription="TODO" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_breakfast"
+                android:contentDescription="TODO" />
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/selectCardsMeal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:cardBackgroundColor="@color/green"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/selectCardsBreakfast">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvMeals"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:hint="Select Meals"
+                android:textColorHint="@color/white"
+                android:textStyle="bold"
+                 />
+
+            <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_arrow_down" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_meals" />
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+
+
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/selectCard"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:cardBackgroundColor="@color/green"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/selectCardsMeal">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -41,9 +131,9 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/selectCardsMeal"
+        android:id="@+id/selectCardSweets"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="50dp"
         app:cardBackgroundColor="@color/green"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -54,13 +144,14 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            >
 
             <TextView
-                android:id="@+id/tvMeals"
+                android:id="@+id/tvSweets"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Select Meals"
+                android:hint="Select Sweets"
                 android:textStyle="bold"
                 android:textColorHint="@color/white"
                 android:layout_centerInParent="true" />
@@ -70,9 +161,19 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerInParent="true"
-                android:src="@drawable/ic_arrow_down" />
+                android:src="@drawable/ic_arrow_down"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_sweets"
+
+                />
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -83,7 +184,7 @@
         android:id="@+id/textViewFood"
         android:layout_marginTop="25dp"
         android:textSize="20sp"
-        android:layout_below="@id/selectCardsMeal"
+        android:layout_below="@id/selectCardSweets"
         android:textColor="@color/white"
         android:textStyle="bold" />
 
@@ -99,7 +200,8 @@
         android:layout_marginTop="30dp"
         android:elevation="2dp"
         app:menu="@menu/bottom_nav"
-        app:itemIconSize="30dp" />
+        app:itemIconSize="30dp"
+        tools:ignore="VisualLintBottomNav" />
 
     <Button
         android:id="@+id/buttonScanner"

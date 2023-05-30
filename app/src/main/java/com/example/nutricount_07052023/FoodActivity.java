@@ -4,7 +4,7 @@ package com.example.nutricount_07052023;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
+
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,7 +29,6 @@ import com.journeyapps.barcodescanner.ScanOptions;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,29 +37,33 @@ import java.util.Set;
 public class FoodActivity extends AppCompatActivity {
     Button btnScan;
     ImageButton imageButtonLogout, imageButtonPersonal;
-    TextView textViewFruit, textViewMeals, textViewCalories;
-    MaterialCardView  selectCardMeals, selectCards;
-    boolean[] selectedFruits, selectedMeals;
+    TextView textViewFruit, textViewMeals, textViewCalories, textViewBreakfast, textViewSweets;
+    MaterialCardView  selectCardMeals, selectCards, selectCardBreakfast, selectCardSweets;
+    boolean[] selectedFruits, selectedMeals, selectedBreakfast, selectedSweets;
     private FoodManager foodManager;
-    private List<Integer> fruitsList = new ArrayList<>();
-    private List<Integer> mealList = new ArrayList<>();
+
     // Konstanten für die Verwendung in SharedPreferences
     private static final String PREF_SELECTED_FRUITS = "selected_fruits";
     private static final String PREF_SELECTED_MEALS = "selected_meals";
+    private static final String PREF_SELECTED_BREAKFAST = "selected_breakfast";
+    private static final String PREF_SELECTED_SWEETS = "selected_sweets";
     private static final String PREF_TOTAL_CALORIES_FOOD="total:calories_food";
-   // private static final String PREF_TEXT_VIEW_FRUIT = "text_view_fruit";
-   //private static final String PREF_TEXT_VIEW_MEALS = "text_view_meals";
-   private static final int REQUEST_CODE_SCAN = 1;
+
+
+    private static final int REQUEST_CODE_SCAN = 1;
 
     Set<String> selectedFruitsSet;
     Set<String> selectedMealsSet;
+    Set<String>selectedBreakfastSet;
+    Set<String>selectedSweetsSet;
     private int totalCalories;
     private FoodDatabase database;
     private FoodDao foodDao;
     private List<FoodEntity>food;
     private List<String> fruitNames; // Liste der Obstnamen
     private List<String> mealNames; // Liste der Mahlzeitenamen
-
+    private List<String > breakfastNames;
+    private List<String> sweetsName;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food);
@@ -69,15 +72,22 @@ public class FoodActivity extends AppCompatActivity {
         textViewCalories = findViewById(R.id.kcal_textview);
         imageButtonLogout=findViewById(R.id.imageButton_logout);
         imageButtonPersonal = findViewById(R.id.btnPersonal);
+        textViewBreakfast=findViewById(R.id.tvBreakfast);
+        textViewSweets=findViewById(R.id.tvSweets);
+
 
         foodManager = new FoodManager();
 
         // Initialize the selectedFruits and selectedMeals arrays
         selectedFruits = new boolean[foodManager.getFruitNames().size()];
         selectedMeals = new boolean[foodManager.getMealNames().size()];
+        selectedBreakfast= new boolean[foodManager.getBreakfastNames().size()];
+        selectedSweets= new boolean[foodManager.getSweetsNames().size()];
 
         selectedFruitsSet = new HashSet<>();
         selectedMealsSet = new HashSet<>();
+        selectedBreakfastSet=new HashSet<>();
+        selectedSweetsSet= new HashSet<>();
 
 
         // Select Card for fruits
@@ -96,6 +106,32 @@ public class FoodActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mealNames = foodManager.getMealNames();
                 showMealDialog();
+            }
+        });
+
+        // Select Card for Breakfast
+        selectCardBreakfast=findViewById(R.id.selectCardsBreakfast);
+        selectCardBreakfast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                breakfastNames=foodManager.getBreakfastNames();
+                showBreakfastDialog();
+            }
+        });
+        // Select Card for Sweets
+        selectCardSweets=findViewById(R.id.selectCardSweets);
+        selectCardSweets.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sweetsName=foodManager.getSweetsNames();
+                showSweetsDialog();
+            }
+        });
+        selectCardBreakfast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                breakfastNames=foodManager.getBreakfastNames();
+                showBreakfastDialog();
             }
         });
 
@@ -286,9 +322,108 @@ public class FoodActivity extends AppCompatActivity {
         builder.show();
     }
 
+    private void showBreakfastDialog() {
+        breakfastNames = foodManager.getBreakfastNames();
+        String[] breakfastArray = breakfastNames.toArray(new String[0]);
+        selectedBreakfastSet = getSelectedBreakfastFromPrefs();
+        boolean[] checkedItems = new boolean[breakfastArray.length];
+        for (int i = 0; i < breakfastArray.length; i++) {
+            checkedItems[i] = selectedBreakfastSet.contains(breakfastArray[i]);
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(FoodActivity.this);
+        builder.setTitle("Select Breakfast");
+        builder.setCancelable(false);
+        builder.setMultiChoiceItems(breakfastArray, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
+                String breakfastName = breakfastArray[which];
+                if (isChecked) {
+                    selectedBreakfastSet.add(breakfastName);
+                } else {
+                    selectedBreakfastSet.remove(breakfastName);
+                }
+            }
+        }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                saveSelectedBreakfastToPrefs();
+                updateSelectedBreakfastTextView();
+                calculateTotalCalories();
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                dialogInterface.dismiss();
+            }
+        }).setNeutralButton("Clear all", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                selectedBreakfastSet.clear();
+                saveSelectedBreakfastToPrefs();
+                updateSelectedBreakfastTextView();
+                calculateTotalCalories();
+            }
+        });
+        builder.show();
+    }
+
+    private void showSweetsDialog() {
+        sweetsName = foodManager.getSweetsNames();
+        String[] sweetArray = sweetsName.toArray(new String[0]);
+
+        // Get the selected sweets from SharedPreferences
+        selectedSweetsSet = getSelectedSweetsFromPrefs();
+
+        boolean[] checkedItems = new boolean[sweetArray.length];
+        for (int i = 0; i < sweetArray.length; i++) {
+            checkedItems[i] = selectedSweetsSet.contains(sweetArray[i]);
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(FoodActivity.this);
+        builder.setTitle("Select Sweets");
+        builder.setCancelable(false);
+        builder.setMultiChoiceItems(sweetArray, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
+                String sweetName = sweetArray[which];
+                if (isChecked) {
+                    selectedSweetsSet.add(sweetName);
+                } else {
+                    selectedSweetsSet.remove(sweetName);
+                }
+            }
+        }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                saveSelectedSweetsToPrefs();
+                updateSelectedSweetsTextView();
+                calculateTotalCalories();
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                dialogInterface.dismiss();
+            }
+        }).setNeutralButton("Clear all", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                selectedSweetsSet.clear();
+                saveSelectedFruitsToPrefs(); //NEU
+                updateSelectedFruitsTextView(); //NEU
+                calculateTotalCalories();
+            }
+        });
+        builder.show();
+    }
+
+
+
     private void calculateTotalCalories() {
         int fruitCalories = 0;
         int mealCalories = 0;
+        int breakfastCalories=0;
+        int sweetsCalories=0;
 
         // Calculate the calories of selected fruits
         for (String fruitName : selectedFruitsSet) {
@@ -299,9 +434,15 @@ public class FoodActivity extends AppCompatActivity {
         for (String mealName : selectedMealsSet) {
             mealCalories += foodManager.getMealCalories(mealName);
         }
+        for(String breakfastName: selectedBreakfastSet){
+            breakfastCalories+=foodManager.getBreakfastCalories(breakfastName);
+        }
+        for(String sweetsName: selectedSweetsSet){
+            sweetsCalories+=foodManager.getSweetsCalories(sweetsName);
+        }
 
         // Sum up the total calories
-        int totalCalories = fruitCalories + mealCalories;
+        int totalCalories = fruitCalories + mealCalories+breakfastCalories+sweetsCalories;
 
         // Display the total calories in the TextView
         textViewCalories.setText("Total Calories: " + totalCalories);
@@ -327,6 +468,18 @@ public class FoodActivity extends AppCompatActivity {
         editor.putStringSet(PREF_SELECTED_MEALS, selectedMealsSet);
         editor.apply();
     }
+    private void saveSelectedBreakfastToPrefs() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putStringSet(PREF_SELECTED_BREAKFAST, selectedBreakfastSet);
+        editor.apply();
+    }
+    private void saveSelectedSweetsToPrefs() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putStringSet(PREF_SELECTED_SWEETS, selectedSweetsSet);
+        editor.apply();
+    }
 
     private void updateSelectedFruitsTextView() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -349,6 +502,29 @@ public class FoodActivity extends AppCompatActivity {
         }
         textViewMeals.setText(stringBuilder.toString());
     }
+    private void updateSelectedBreakfastTextView() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String breakfastName : selectedBreakfastSet) {
+            stringBuilder.append(breakfastName).append(", ");
+        }
+        if (stringBuilder.length() > 0) {
+            stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+        }
+
+        textViewBreakfast.setText(stringBuilder.toString());
+    }
+    private void updateSelectedSweetsTextView() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String sweetsName : selectedSweetsSet) {
+            stringBuilder.append(sweetsName).append(", ");
+        }
+        if (stringBuilder.length() > 0) {
+            stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+        }
+
+        textViewSweets.setText(stringBuilder.toString());
+    }
+
     private Set<String> getSelectedFruitsFromPrefs() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         return sharedPreferences.getStringSet(PREF_SELECTED_FRUITS, new HashSet<>());
@@ -357,12 +533,22 @@ public class FoodActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         return sharedPreferences.getStringSet(PREF_SELECTED_MEALS, new HashSet<>());
     }
+    private Set<String> getSelectedBreakfastFromPrefs() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        return sharedPreferences.getStringSet(PREF_SELECTED_BREAKFAST, new HashSet<>());
+    }
+    private Set<String> getSelectedSweetsFromPrefs() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        return sharedPreferences.getStringSet(PREF_SELECTED_SWEETS, new HashSet<>());
+    }
     @Override
     protected void onPause() {
         super.onPause();
         // Speichern der ausgewählten Früchte, Mahlzeiten und Gesamtkalorien in den SharedPreferences
         saveSelectedFruitsToPrefs();
         saveSelectedMealsToPrefs();
+        saveSelectedBreakfastToPrefs();
+        saveSelectedSweetsToPrefs();
         saveTotalCaloriesToPrefs();
     }
 
@@ -372,10 +558,15 @@ public class FoodActivity extends AppCompatActivity {
         // Wiederherstellen der ausgewählten Früchte, Mahlzeiten und Gesamtkalorien aus den SharedPreferences
         selectedFruitsSet = getSelectedFruitsFromPrefs();
         selectedMealsSet = getSelectedMealsFromPrefs();
+        selectedBreakfastSet=getSelectedBreakfastFromPrefs();
+        selectedSweetsSet=getSelectedSweetsFromPrefs();
         totalCalories = getTotalCaloriesFromPrefs();
+
         // Aktualisieren der TextViews mit den wiederhergestellten Werten
         updateSelectedFruitsTextView();
         updateSelectedMealsTextView();
+        updateSelectedBreakfastTextView();
+        updateSelectedSweetsTextView();
         textViewCalories.setText("Total Calories: " + totalCalories);
         calculateTotalCalories();
     }

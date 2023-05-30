@@ -3,6 +3,7 @@ package com.example.nutricount_07052023;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,20 +13,26 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class BottomNavActivity extends AppCompatActivity {
     TextView diffTextView;
-    Button  btn_submit;
-    TextView textView_datum, textView_welcome, bottomNavTotalCaloriesTextView, bottomNavTotalLostCalories;
+    Button btn_submit;
+    TextInputLayout dateInputLayout;
+    TextInputEditText dateEditText;
+    TextView textView_welcome, bottomNavTotalCaloriesTextView, bottomNavTotalLostCalories;
     private static final String DATE_PREF_KEY = "current_date";
     ImageButton imageButtonPersonal, imageButtonLogout;
     SharedPreferences sharedPreferences;
@@ -34,15 +41,33 @@ public class BottomNavActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_nav);
+        imageButtonPersonal = findViewById(R.id.btnPersonal);
+        imageButtonLogout = findViewById(R.id.imageButton_logout);
+        textView_welcome = findViewById(R.id.welcome_message);
+
+        dateInputLayout = findViewById(R.id.dateInputLayout);
+        dateEditText = findViewById(R.id.dateEditText);
+        // Aktuelles Datum erhalten
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        String currentDate = dateFormat.format(calendar.getTime());
+        // Datum in das Textfeld einfügen
+        dateEditText.setText(currentDate);
+        // Klickereignis für das Textfeld hinzufügen, um den DatePickerDialog zu öffnen
+        dateEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+            }
+        });
+
 
         // Welcome Message
         String username = getIntent().getStringExtra("USERNAME");
-        textView_welcome = findViewById(R.id.welcome_message);
         textView_welcome.setText("Welcome " + username + "!");
 
         // Willkommensnachricht aus den SharedPreferences abrufen und anzeigen
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
         bottomNavTotalLostCalories = findViewById(R.id.textViewTrySport);
         bottomNavTotalCaloriesTextView = findViewById(R.id.textViewTryFood);
         btn_submit = findViewById(R.id.buttonsubmit);
@@ -83,10 +108,11 @@ public class BottomNavActivity extends AppCompatActivity {
             }
         });
 
-        imageButtonLogout = findViewById(R.id.imageButton_logout);
 
-        // Datum aus den SharedPreferences abrufen
-        textView_datum = findViewById(R.id.textView_date2); // Vorher initialisieren
+
+       /* // Datum aus den SharedPreferences abrufen
+        textView_datum = findViewById(R.id.textView_date2);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String currentDate = sharedPreferences.getString(DATE_PREF_KEY, "");
         if (!currentDate.isEmpty()) {
             textView_datum.setText(currentDate);
@@ -102,9 +128,9 @@ public class BottomNavActivity extends AppCompatActivity {
             editor.apply();
 
             textView_datum.setText(formattedDate);
-        }
+        }*/
 
-        imageButtonPersonal = findViewById(R.id.btnPersonal);
+
         imageButtonPersonal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,6 +138,14 @@ public class BottomNavActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        imageButtonLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLogoutDialog();
+            }
+        });
+
+
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.bottom_home);
@@ -139,12 +173,7 @@ public class BottomNavActivity extends AppCompatActivity {
             return false;
         });
 
-        imageButtonLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showLogoutDialog();
-            }
-        });
+
     }
 
     private void showLogoutDialog() {
@@ -162,6 +191,25 @@ public class BottomNavActivity extends AppCompatActivity {
         alertDialog.setNegativeButton("No", null);
         alertDialog.show();
     }
+    private void showDatePickerDialog() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
+        DatePickerDialog datePickerDialog = new DatePickerDialog(BottomNavActivity.this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        // Das ausgewählte Datum in das Textfeld einfügen
+                        String selectedDate = String.format(Locale.getDefault(), "%02d.%02d.%04d",
+                                dayOfMonth, month + 1, year);
+                        dateEditText.setText(selectedDate);
+                    }
+                }, year, month, dayOfMonth);
 
+        datePickerDialog.show();
+    }
+
+    //aller letzte Klammer
 }

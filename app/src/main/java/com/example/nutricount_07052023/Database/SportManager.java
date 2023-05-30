@@ -13,10 +13,16 @@ public class SportManager {
 
     private void initializeSportList() {
         // Füge deine Sportarten mit den Kalorienwerten hinzu
-        sportList.add(new SportEntity("Cardio 30min", 200));
-        sportList.add(new SportEntity("Cardio 1h", 220));
-        sportList.add(new SportEntity("Running 30min", 100));
-        sportList.add(new SportEntity("Running 1h", 150));
+        sportList.add(new SportEntity("Cardio 30min", 300));
+        sportList.add(new SportEntity("Cardio 1h", 400));
+        sportList.add(new SportEntity("Running 30min", 300));
+        sportList.add(new SportEntity("Running 1h", 700));
+        sportList.add(new SportEntity("Swimming 30min", 350));
+        sportList.add(new SportEntity("Swimming 1h", 600));
+        sportList.add(new SportEntity("Biking 30min", 220));
+        sportList.add(new SportEntity("Biking 1h", 500));
+        sportList.add(new SportEntity("Dancing 30min", 230));
+        sportList.add(new SportEntity("Dancing 1h", 470));
     }
 
     public List<String> getSportNames() {
