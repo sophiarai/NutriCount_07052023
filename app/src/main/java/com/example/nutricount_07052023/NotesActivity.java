@@ -67,7 +67,7 @@ public class NotesActivity extends AppCompatActivity {
         String datum = datumsFormat.format(kalender.getTime());
 
         notesList.add(new Note(datum, "Kalorien Gesamt: "+"400" ,"Verbrannte Kalorien: "+"150", "Gegessene Kalorien: "+"250"));
-
+        notesList.add(new Note(datum, "Kalorien Gesamt: "+"500" ,"Verbrannte Kalorien: "+"150", "Gegessene Kalorien: "+"250"));
 
 
 
