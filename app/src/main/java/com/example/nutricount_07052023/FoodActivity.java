@@ -409,14 +409,13 @@ public class FoodActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int which) {
                 selectedSweetsSet.clear();
-                saveSelectedFruitsToPrefs(); //NEU
-                updateSelectedFruitsTextView(); //NEU
+                saveSelectedSweetsToPrefs();
+                updateSelectedSweetsTextView();
                 calculateTotalCalories();
             }
         });
         builder.show();
     }
-
 
 
     private void calculateTotalCalories() {
@@ -429,20 +428,19 @@ public class FoodActivity extends AppCompatActivity {
         for (String fruitName : selectedFruitsSet) {
             fruitCalories += foodManager.getFruitCalories(fruitName);
         }
-
         // Calculate the calories of selected meals
         for (String mealName : selectedMealsSet) {
             mealCalories += foodManager.getMealCalories(mealName);
-        }
+        }//breakfast
         for(String breakfastName: selectedBreakfastSet){
             breakfastCalories+=foodManager.getBreakfastCalories(breakfastName);
-        }
+        }//sweets
         for(String sweetsName: selectedSweetsSet){
             sweetsCalories+=foodManager.getSweetsCalories(sweetsName);
         }
 
         // Sum up the total calories
-        int totalCalories = fruitCalories + mealCalories+breakfastCalories+sweetsCalories;
+        int totalCalories = fruitCalories + mealCalories + breakfastCalories + sweetsCalories;
 
         // Display the total calories in the TextView
         textViewCalories.setText("Total Calories: " + totalCalories);
@@ -544,7 +542,7 @@ public class FoodActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        // Speichern der ausgewählten Früchte, Mahlzeiten und Gesamtkalorien in den SharedPreferences
+        // Speichern der ausgewählten Früchte, Mahlzeiten, Frühstuck, Süßigkeiten und Gesamtkalorien in den SharedPreferences
         saveSelectedFruitsToPrefs();
         saveSelectedMealsToPrefs();
         saveSelectedBreakfastToPrefs();
