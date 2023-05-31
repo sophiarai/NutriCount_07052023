@@ -4,18 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NotesActivity">
-    <!--android:background="@drawable/background">-->
+    tools:context=".NotesActivity"
+    android:background="@drawable/background">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <ImageButton
+        android:id="@+id/btnPersonal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/app_name"
+        android:minHeight="48dp"
+        app:srcCompat="@drawable/ic_personblack"
+        tools:ignore="DuplicateSpeakableTextCheck" />
 
-        <ListView
-            android:id="@+id/notes_listView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </ScrollView>
+    <ImageButton
+        android:id="@+id/imageButton_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnPersonal"
+        android:contentDescription="@string/app_name"
+        android:minHeight="48dp"
+        app:srcCompat="@drawable/ic_logout" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"

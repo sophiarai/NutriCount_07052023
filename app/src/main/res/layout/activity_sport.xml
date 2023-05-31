@@ -8,14 +8,6 @@
     android:background="@drawable/background">
 
 
-
-
-
-
-
-
-
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/selectCardSport"
         android:layout_width="match_parent"
@@ -25,8 +17,8 @@
         android:layout_marginEnd="16dp"
         app:cardCornerRadius="5dp"
         app:cardElevation="10dp"
-        android:layout_marginTop="70sp"
-       android:layout_alignParentTop="true">
+        android:layout_marginTop="100sp"
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -39,32 +31,89 @@
                 android:layout_centerInParent="true"
                 android:hint="Select Sport"
                 android:textColorHint="@color/white"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="RelativeOverlap" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerInParent="true"
-                android:src="@drawable/ic_arrow_down" />
+                android:src="@drawable/ic_arrow_down"
+                android:contentDescription="TODO" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_sports"
+                android:contentDescription="TODO" />
         </RelativeLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
+    <ImageView
+        android:id="@+id/circle"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_below="@id/selectCardSport"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/circle" />
+
+    <TextView
+        android:id="@+id/tv_stepsTaken"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/selectCardSport"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="100dp"
+        android:text="0"
+        android:textColor="@color/white"
+        android:textSize="37sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/steps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_stepsTaken"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="3dp"
+        android:text="Steps"
+        android:textSize="45sp"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/kcal_sport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/bottomNavigationView"
+        android:layout_below="@id/circle"
+        android:layout_marginTop="5dp"
         android:layout_centerInParent="true"
-        android:layout_marginBottom="70sp"
-        android:paddingLeft="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="50sp"
+        android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:paddingEnd="10dp"
         android:paddingBottom="10dp"
         android:textColor="@color/white"
-        android:textSize="25sp" />
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/button_steps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottomNavigationView"
+        android:layout_centerInParent="true"
+        android:backgroundTint="@color/green"
+        android:drawableStart="@drawable/ic_walk"
+        android:text="Reset Steps"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -80,6 +129,27 @@
         android:elevation="2dp"
         app:itemIconSize="30dp"
 
-        app:menu="@menu/bottom_nav" />
+        app:menu="@menu/bottom_nav"
+        tools:ignore="VisualLintBottomNav" />
+
+    <ImageButton
+        android:id="@+id/btnPersonal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/app_name"
+        android:minHeight="48dp"
+        app:srcCompat="@drawable/ic_personblack"
+        tools:ignore="DuplicateSpeakableTextCheck" />
+
+    <ImageButton
+        android:id="@+id/imageButton_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnPersonal"
+        android:contentDescription="@string/app_name"
+        android:minHeight="48dp"
+        app:srcCompat="@drawable/ic_logout" />
+
+
 
 </RelativeLayout>

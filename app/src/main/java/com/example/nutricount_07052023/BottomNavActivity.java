@@ -3,135 +3,155 @@ package com.example.nutricount_07052023;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class BottomNavActivity extends AppCompatActivity {
     TextView diffTextView;
-    Button btn_date, btn_submit;
-    TextView textView_datum, textView_welcome, bottomNavTotalCaloriesTextView, bottomNavTotalLostCalories;
-
-ImageButton imageButtonPersonal, imageButtonLogout;
+    Button btn_submit;
+    TextInputLayout dateInputLayout;
+    TextInputEditText dateEditText;
+    TextView textView_welcome, bottomNavTotalCaloriesTextView, bottomNavTotalLostCalories;
+    private static final String DATE_PREF_KEY = "current_date";
+    ImageButton imageButtonPersonal, imageButtonLogout;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_nav);
+        imageButtonPersonal = findViewById(R.id.btnPersonal);
+        imageButtonLogout = findViewById(R.id.imageButton_logout);
+        textView_welcome = findViewById(R.id.welcome_message);
 
-        btn_submit=findViewById(R.id.buttonsubmit);
-        diffTextView=findViewById(R.id.textViewDifference);
+        dateInputLayout = findViewById(R.id.dateInputLayout);
+        dateEditText = findViewById(R.id.dateEditText);
+        // Aktuelles Datum erhalten
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        String currentDate = dateFormat.format(calendar.getTime());
+        // Datum in das Textfeld einfügen
+        dateEditText.setText(currentDate);
+        // Klickereignis für das Textfeld hinzufügen, um den DatePickerDialog zu öffnen
+        dateEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog();
+            }
+        });
+
+
+        // Welcome Message
+        String username = getIntent().getStringExtra("USERNAME");
+        textView_welcome.setText("Welcome " + username + "!");
+
+        // Willkommensnachricht aus den SharedPreferences abrufen und anzeigen
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        bottomNavTotalLostCalories = findViewById(R.id.textViewTrySport);
+        bottomNavTotalCaloriesTextView = findViewById(R.id.textViewTryFood);
+        btn_submit = findViewById(R.id.buttonsubmit);
+        diffTextView = findViewById(R.id.textViewDifference);
 
         // Gesamtkalorien (gained) aus den SharedPreferences abrufen und anzeigen
-         bottomNavTotalCaloriesTextView = findViewById(R.id.textViewTryFood);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int totalCalories = sharedPreferences.getInt("totalCalories", 0);
         bottomNavTotalCaloriesTextView.setText("Gained calories: " + totalCalories);
 
         // Gesamtkalorien (lost) aus den SharedPreferences abrufen und anzeigen
-         bottomNavTotalLostCalories= findViewById(R.id.textViewTrySport);
-         SharedPreferences sharedPreferences1=PreferenceManager.getDefaultSharedPreferences(this);
-         int totalCalories2= sharedPreferences1.getInt("totalCalories2", 0);
-         bottomNavTotalLostCalories.setText("Lost calories: "+ totalCalories2);
+        int totalCaloriesLost = sharedPreferences.getInt("total_calories_sport", 0);
+        bottomNavTotalLostCalories.setText("Lost calories: " + totalCaloriesLost);
 
-         btn_submit.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                 // Gesamtkalorien (gained) aus den SharedPreferences abrufen
-                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BottomNavActivity.this);
-                 int gainedCalories = sharedPreferences.getInt("totalCalories", 0);
+        // Überprüfen, ob ein übergebener Kalorienwert vorhanden ist
+        if (getIntent().hasExtra("totalCaloriesSport")) {
+            int totalCaloriesSport = getIntent().getIntExtra("totalCaloriesSport", 0);
+            bottomNavTotalLostCalories.setText("Lost calories: " + totalCaloriesSport);
 
-                 // Gesamtkalorien (lost) aus den SharedPreferences abrufen
-                 SharedPreferences sharedPreferences1 = PreferenceManager.getDefaultSharedPreferences(BottomNavActivity.this);
-                 int lostCalories = sharedPreferences1.getInt("totalCalories2", 0);
-
-                 // Differenz berechnen
-                 int result = gainedCalories - lostCalories;
-
-                 // Ergebnis anzeigen
-                 diffTextView.setText("Total gained calories: " + result);
-
-                 if (result >= 1000) {
-                     showAlertTotalCalories();
-                 }
-             }});
-
-
-        imageButtonLogout=(ImageButton)findViewById(R.id.imageButton_logout);
-
-
-        String username=getIntent().getStringExtra("USERNAME");
-        textView_welcome= (TextView) findViewById(R.id.welcome_message);
-        textView_welcome.setText("Welcome "+username+"!");
-
-
-        String username2=getIntent().getStringExtra("username");
-        textView_welcome= (TextView) findViewById(R.id.welcome_message);
-        textView_welcome.setText("Welcome "+username2+"!");
-
-
-
-        //Heutiges Datum anzeigen lassen
-        textView_datum = (TextView) findViewById(R.id.textView_date2);
-        btn_date = (Button) findViewById(R.id.button_date);
-
-        btn_date.setOnClickListener(new View.OnClickListener() {
+            // Speichern des übergebenen Kalorienwerts in den SharedPreferences
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("total_calories_sport", totalCaloriesSport);
+            editor.apply();
+        }
+        btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendar kalender = Calendar.getInstance();
-                SimpleDateFormat datumsFormat = new SimpleDateFormat("dd.MM.yyyy");
-                textView_datum.setText(datumsFormat.format(kalender.getTime()));
+                // Gesamtkalorien (gained) aus den SharedPreferences abrufen
+                int gainedCalories = sharedPreferences.getInt("totalCalories", 0);
+
+                // Gesamtkalorien (lost) aus den SharedPreferences abrufen
+                int lostCalories = sharedPreferences.getInt("total_calories_sport", 0);
+
+                // Differenz berechnen
+                int result = gainedCalories - lostCalories;
+
+                // Ergebnis anzeigen
+                diffTextView.setText("Total gained calories: " + result);
             }
         });
 
 
-        //TextView burnedKcalTextView = findViewById(R.id.textViewTrySport);
-        //int burned_Calories = BurnedCalories.getInstance().getBurnedCalories();
-       // burnedKcalTextView.setText(String.format("Burned calories: %d kcal", burned_Calories));
+
+       /* // Datum aus den SharedPreferences abrufen
+        textView_datum = findViewById(R.id.textView_date2);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String currentDate = sharedPreferences.getString(DATE_PREF_KEY, "");
+        if (!currentDate.isEmpty()) {
+            textView_datum.setText(currentDate);
+        } else {
+            // Heutiges Datum anzeigen lassen
+            Calendar kalender = Calendar.getInstance();
+            SimpleDateFormat datumsFormat = new SimpleDateFormat("dd.MM.yyyy");
+            String formattedDate = datumsFormat.format(kalender.getTime());
+
+            // Datum in den SharedPreferences speichern
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(DATE_PREF_KEY, formattedDate);
+            editor.apply();
+
+            textView_datum.setText(formattedDate);
+        }*/
 
 
-       // TextView gainedKcalTextView = findViewById(R.id.textViewTryFood);
-        //int gained_calories = GainedCalories.getInstance().getGainedCalories();
-        //gainedKcalTextView.setText(String.format("Gained calories: %d kcal", gained_calories));
-
-        //int netto_kalorien = gained_calories - burned_Calories;
-       // diffTextView = (TextView)findViewById(R.id.textViewDifference);
-        //diffTextView.setText(String.format("Netto-Kalorien: %d kcal", netto_kalorien));
-
-
-
-
-        imageButtonPersonal=(ImageButton) findViewById(R.id.btnPersonal);
         imageButtonPersonal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent (BottomNavActivity.this, PersonalActivity.class);
+                Intent intent = new Intent(BottomNavActivity.this, PersonalActivity.class);
                 startActivity(intent);
+            }
+        });
+        imageButtonLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showLogoutDialog();
             }
         });
 
 
 
-        BottomNavigationView bottomNavigationView=findViewById(R.id.bottomNavigationView);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.bottom_home);
 
-        bottomNavigationView.setOnItemSelectedListener(item->{
-            switch (item.getItemId()){
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()) {
                 case R.id.bottom_home:
                     return true;
                 case R.id.bottom_sport:
@@ -153,17 +173,9 @@ ImageButton imageButtonPersonal, imageButtonLogout;
             return false;
         });
 
-        imageButtonLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showLogoutDialog();
-            }
-        });
-
-
-
 
     }
+
     private void showLogoutDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("LogOut");
@@ -178,15 +190,26 @@ ImageButton imageButtonPersonal, imageButtonLogout;
         });
         alertDialog.setNegativeButton("No", null);
         alertDialog.show();
-}
+    }
+    private void showDatePickerDialog() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
-    private void showAlertTotalCalories(){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle("Warnung!");
-        alertDialog.setMessage("Achtung! Sie befinden sich über dem täglichen Kalorienbedarf");
-        alertDialog.setPositiveButton("Verstanden", null);
-        alertDialog.show();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(BottomNavActivity.this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        // Das ausgewählte Datum in das Textfeld einfügen
+                        String selectedDate = String.format(Locale.getDefault(), "%02d.%02d.%04d",
+                                dayOfMonth, month + 1, year);
+                        dateEditText.setText(selectedDate);
+                    }
+                }, year, month, dayOfMonth);
+
+        datePickerDialog.show();
     }
 
-//letzte Klammer
+    //aller letzte Klammer
 }
