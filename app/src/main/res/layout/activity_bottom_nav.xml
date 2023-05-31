@@ -21,7 +21,7 @@
         app:menu="@menu/bottom_nav"
         app:itemIconSize="30dp"
 
-        />
+        tools:ignore="VisualLintBottomNav" />
 
     <TextView
         android:id="@+id/textViewDay"
@@ -146,8 +146,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="100dp"
         app:boxBackgroundColor="@color/green"
         android:hint="Select Date"
         android:textColorHint="@color/white"
@@ -157,10 +157,11 @@
             android:id="@+id/dateEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableRight="@drawable/ic_arrow_down"
-            android:drawableLeft="@drawable/ic_date"
+            android:drawableEnd="@drawable/ic_arrow_down"
+            android:drawableStart="@drawable/ic_date"
             android:focusable="false"
-            android:inputType="none" />
+            android:inputType="none"
+            tools:ignore="VisualLintTextFieldSize" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
