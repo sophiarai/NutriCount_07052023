@@ -109,13 +109,6 @@ public class PersonalActivity extends AppCompatActivity {
                 startActivity(intent);
             }});
 
-        /*btncalculate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                calculateCalorie();
-            }
-        });*/
-
         // Wiederherstellen des gespeicherten BMI-Werts
         float bmiValue = prefs.getFloat("bmi", 0.0f); // 0.0f ist der Standardwert, falls kein Wert gefunden wurde
         // Überprüfen, ob ein gültiger BMI-Wert gefunden wurde
@@ -167,7 +160,6 @@ public class PersonalActivity extends AppCompatActivity {
         editor.putInt("gender", radioGroup.getCheckedRadioButtonId());
         editor.putFloat("calorieLimit", (float) calorieLimit);
         editor.apply();
-
     }
 
     private int calculateAge(int year, int month, int day) {
