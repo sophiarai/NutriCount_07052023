@@ -13,6 +13,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -28,7 +29,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
-
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.os.Bundle;
+import android.widget.TextView;
 
 
 public class SportActivity extends AppCompatActivity implements SensorEventListener {
@@ -46,6 +52,8 @@ public class SportActivity extends AppCompatActivity implements SensorEventListe
     private List<SportEntity> sports;
 
     private SensorManager sensorManager;
+    private Sensor stepSensor;
+    private int stepsTaken = 0;
     private boolean running = false;
 
     @Override
@@ -55,18 +63,30 @@ public class SportActivity extends AppCompatActivity implements SensorEventListe
 
         imageButtonLogout=findViewById(R.id.imageButton_logout);
         imageButtonPersonal = findViewById(R.id.btnPersonal);
-
         btnResetSteps = findViewById(R.id.button_steps);
         textViewSteps = findViewById(R.id.tv_stepsTaken);
 
+        // Initialisierung des SensorManagers und des Schrittzähler-Sensors
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        if (sensorManager != null) {
+            stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        }
+
+        if (stepSensor == null) {
+            Toast.makeText(this, "Schrittzähler-Sensor nicht verfügbar", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Schrittzähler-Sensor verfügbar", Toast.LENGTH_SHORT).show();
+        }
+
+
+        /*sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         if (countSensor == null) {
             Toast.makeText(this, "This device does not support step counting.", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "This device does support step counting.", Toast.LENGTH_SHORT).show();
         }
-        btnResetSteps.setOnClickListener(view -> resetSteps());
+        btnResetSteps.setOnClickListener(view -> resetSteps());*/
 
         textViewkcalSport = findViewById(R.id.kcal_sport);
         selectCardSport = findViewById(R.id.selectCardSport);
@@ -240,8 +260,11 @@ public class SportActivity extends AppCompatActivity implements SensorEventListe
     @Override
     protected void onPause() {
         super.onPause();
-        running=false;
+        // Entfernung des SensorListeners
         sensorManager.unregisterListener(this);
+
+       // running=false;
+        //sensorManager.unregisterListener(this);
 
         // Speichern des aktuellen Zustands in SharedPreferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -254,13 +277,17 @@ public class SportActivity extends AppCompatActivity implements SensorEventListe
     @Override
     protected void onResume() {
         super.onResume();
-        running=true;
+        // Registrierung des SensorListeners
+
+            sensorManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+       /* running=true;
         Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         if (countSensor != null) {
             sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
         } else {
             Toast.makeText(this, "Sensor not found!", Toast.LENGTH_SHORT).show();
-        }
+        }*/
 
         // Wiederherstellen des gespeicherten Zustands aus SharedPreferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -313,10 +340,16 @@ public class SportActivity extends AppCompatActivity implements SensorEventListe
     }
 
     @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (running) {
+   public void onSensorChanged(SensorEvent event) {
+        // Aktualisierung der Schritte
+        if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
+            stepsTaken = (int) event.values[0];
+            textViewSteps.setText(String.valueOf(stepsTaken));
+          Log.d("StepCounter", "Schritte aktualisiert: " + stepsTaken);
+        }
+       /* if (running) {
             textViewSteps.setText(String.valueOf(event.values[0]));
             updateTotalCalories();
-        }
+        }*/
     }
 }
