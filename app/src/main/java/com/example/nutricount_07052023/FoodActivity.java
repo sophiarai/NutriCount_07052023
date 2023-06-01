@@ -1,23 +1,18 @@
 package com.example.nutricount_07052023;
 
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-
+import androidx.room.Room;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
-
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import com.example.nutricount_07052023.Database.FoodDao;
 import com.example.nutricount_07052023.Database.FoodDatabase;
 import com.example.nutricount_07052023.Database.FoodEntity;
@@ -26,9 +21,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
-
-
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,17 +33,12 @@ public class FoodActivity extends AppCompatActivity {
     MaterialCardView  selectCardMeals, selectCards, selectCardBreakfast, selectCardSweets;
     boolean[] selectedFruits, selectedMeals, selectedBreakfast, selectedSweets;
     private FoodManager foodManager;
-
     // Konstanten für die Verwendung in SharedPreferences
     private static final String PREF_SELECTED_FRUITS = "selected_fruits";
     private static final String PREF_SELECTED_MEALS = "selected_meals";
     private static final String PREF_SELECTED_BREAKFAST = "selected_breakfast";
     private static final String PREF_SELECTED_SWEETS = "selected_sweets";
     private static final String PREF_TOTAL_CALORIES_FOOD="total:calories_food";
-
-
-    private static final int REQUEST_CODE_SCAN = 1;
-
     Set<String> selectedFruitsSet;
     Set<String> selectedMealsSet;
     Set<String>selectedBreakfastSet;
@@ -75,7 +62,11 @@ public class FoodActivity extends AppCompatActivity {
         textViewBreakfast=findViewById(R.id.tvBreakfast);
         textViewSweets=findViewById(R.id.tvSweets);
 
-
+        //DB initialisieren:
+        database= Room.databaseBuilder(getApplicationContext(), FoodDatabase.class, "fooddatabase-name")
+                .allowMainThreadQueries().build();
+        foodDao=database.foodDao();
+        food=foodDao.getAllFoodItems();
         foodManager = new FoodManager();
 
         // Initialize the selectedFruits and selectedMeals arrays
@@ -127,13 +118,7 @@ public class FoodActivity extends AppCompatActivity {
                 showSweetsDialog();
             }
         });
-        selectCardBreakfast.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                breakfastNames=foodManager.getBreakfastNames();
-                showBreakfastDialog();
-            }
-        });
+
 
 
         // QRCode Scanner

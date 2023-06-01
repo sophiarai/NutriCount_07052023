@@ -1,7 +1,6 @@
 package com.example.nutricount_07052023;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,6 +16,9 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.nutricount_07052023.Database.SportDao;
+import com.example.nutricount_07052023.Database.SportDatabase;
+
 
 public class PersonalActivity extends AppCompatActivity {
     public static final String MY_PREFS_NAME="MyPrefsFile";
@@ -27,8 +29,9 @@ public class PersonalActivity extends AppCompatActivity {
    RadioButton radioButton;
    TextView textViewresult, textViewKaloriengrenze;
    RadioGroup radioGroup;
-
    SharedPreferences prefs;
+
+
 
 
     @Override
