@@ -79,8 +79,15 @@ public class BottomNavActivity extends AppCompatActivity {
         int totalCalories = sharedPreferences.getInt("totalCalories", 0);
         bottomNavTotalCaloriesTextView.setText("Gained calories: " + totalCalories);
         // Gesamtkalorien (lost) aus den SharedPreferences abrufen und anzeigen
-        int totalCaloriesLost = sharedPreferences.getInt("total_calories_sport", 0);
+        String totalCaloriesLostString = sharedPreferences.getString("total_calories_sport", "");
+        int totalCaloriesLost = 0;
+        try {
+            totalCaloriesLost = Integer.parseInt(totalCaloriesLostString);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
         bottomNavTotalLostCalories.setText("Lost calories: " + totalCaloriesLost);
+
         // Überprüfen, ob ein übergebener Kalorienwert vorhanden ist
         if (getIntent().hasExtra("totalCaloriesSport")) {
             int totalCaloriesSport = getIntent().getIntExtra("totalCaloriesSport", 0);
@@ -108,7 +115,7 @@ public class BottomNavActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt(DIFF_PREF_KEY, result);
                 editor.apply();
-                // Holen Sie den gespeicherten Wert des Kalorienlimits aus den SharedPreferences
+                // Hole den gespeicherten Wert des Kalorienlimits aus den SharedPreferences
                 SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
                 float calorieLimit = prefs.getFloat("calorieLimit", 0.0f);
                 // Überprüfen, ob die gesammelten Kalorien die Kaloriengrenze überschreiten
@@ -122,6 +129,7 @@ public class BottomNavActivity extends AppCompatActivity {
                 } else {
                     // Wenn das Ergebnis nicht größer als die Kaloriengrenze ist, wird kein AlertDialog angezeigt
                 }}});
+
         // Wiederherstellen des gespeicherten Werts für das diffTextView
         int savedResult = sharedPreferences.getInt(DIFF_PREF_KEY, 0);
         diffTextView.setText("Total gained calories: " + savedResult);

@@ -235,15 +235,18 @@
         android:contentDescription="@string/app_name"
         android:minHeight="48dp"
         app:srcCompat="@drawable/ic_personblack"
-        tools:ignore="DuplicateSpeakableTextCheck" />
+        tools:ignore="DuplicateSpeakableTextCheck"
+        android:backgroundTint="@color/white"/>
 
     <ImageButton
         android:id="@+id/imageButton_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btnPersonal"
+        android:layout_toRightOf="@id/btnPersonal"
+        android:layout_toEndOf="@id/btnPersonal"
         android:contentDescription="@string/app_name"
         android:minHeight="48dp"
+        android:backgroundTint="@color/white"
         app:srcCompat="@drawable/ic_logout" />
 
 </RelativeLayout>

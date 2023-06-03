@@ -4,12 +4,10 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -44,10 +42,6 @@ public class FoodActivity extends AppCompatActivity {
     Set<String>selectedBreakfastSet;
     Set<String>selectedSweetsSet;
     private int totalCalories;
-    private FoodDatabase database;
-    private FoodDao foodDao;
-    private List<FoodEntity>food;
-    private List<String> fruitNames; // Liste der Obstnamen
     private List<String> mealNames; // Liste der Mahlzeitenamen
     private List<String > breakfastNames;
     private List<String> sweetsName;
@@ -63,10 +57,10 @@ public class FoodActivity extends AppCompatActivity {
         textViewSweets=findViewById(R.id.tvSweets);
 
         //DB initialisieren:
-        database= Room.databaseBuilder(getApplicationContext(), FoodDatabase.class, "fooddatabase-name")
+        FoodDatabase database = Room.databaseBuilder(getApplicationContext(), FoodDatabase.class, "fooddatabase-name")
                 .allowMainThreadQueries().build();
-        foodDao=database.foodDao();
-        food=foodDao.getAllFoodItems();
+        FoodDao foodDao = database.foodDao();
+        List<FoodEntity> food = foodDao.getAllFoodItems();
         foodManager = new FoodManager();
 
         // Initialize the selectedFruits and selectedMeals arrays
@@ -83,59 +77,37 @@ public class FoodActivity extends AppCompatActivity {
 
         // Select Card for fruits
         selectCards = findViewById(R.id.selectCard);
-        selectCards.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showFruitDialog();
-            }
-        });
+        selectCards.setOnClickListener(view -> showFruitDialog());
 
         // Select Card for meals
         selectCardMeals = findViewById(R.id.selectCardsMeal);
-        selectCardMeals.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mealNames = foodManager.getMealNames();
-                showMealDialog();
-            }
+        selectCardMeals.setOnClickListener(view -> {
+            mealNames = foodManager.getMealNames();
+            showMealDialog();
         });
 
         // Select Card for Breakfast
         selectCardBreakfast=findViewById(R.id.selectCardsBreakfast);
-        selectCardBreakfast.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                breakfastNames=foodManager.getBreakfastNames();
-                showBreakfastDialog();
-            }
+        selectCardBreakfast.setOnClickListener(view -> {
+            breakfastNames=foodManager.getBreakfastNames();
+            showBreakfastDialog();
         });
         // Select Card for Sweets
         selectCardSweets=findViewById(R.id.selectCardSweets);
-        selectCardSweets.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sweetsName=foodManager.getSweetsNames();
-                showSweetsDialog();
-            }
+        selectCardSweets.setOnClickListener(view -> {
+            sweetsName=foodManager.getSweetsNames();
+            showSweetsDialog();
         });
 
 
 
         // QRCode Scanner
-        btnScan = (Button) findViewById(R.id.buttonScanner);
-        btnScan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                scanCode();
-            }
-        });
+        btnScan = findViewById(R.id.buttonScanner);
+        btnScan.setOnClickListener(view -> scanCode());
 
-        imageButtonPersonal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(FoodActivity.this, PersonalActivity.class);
-                startActivity(intent);
-            }
+        imageButtonPersonal.setOnClickListener(view -> {
+            Intent intent = new Intent(FoodActivity.this, PersonalActivity.class);
+            startActivity(intent);
         });
 
         // BottomNav in Activity anzeigen
@@ -164,24 +136,16 @@ public class FoodActivity extends AppCompatActivity {
             }
             return false;
         });
-        imageButtonLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showLogoutDialog();
-            }
-        });
+        imageButtonLogout.setOnClickListener(view -> showLogoutDialog());
     }
     private void showLogoutDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("LogOut");
         alertDialog.setMessage("Do you really want to Logout?");
-        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(FoodActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        alertDialog.setPositiveButton("Yes", (dialog, which) -> {
+            Intent intent = new Intent(FoodActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         });
         alertDialog.setNegativeButton("No", null);
         alertDialog.show();
@@ -202,17 +166,13 @@ public class FoodActivity extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(FoodActivity.this);
             builder.setTitle("Result");
             builder.setMessage(result.getContents());
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    dialogInterface.dismiss();
-                }
-            }).show();
+            builder.setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss()).show();
         }
     });
 
     private void showFruitDialog() {
-        fruitNames = foodManager.getFruitNames();
+        // Liste der Obstnamen
+        List<String> fruitNames = foodManager.getFruitNames();
         String[] fruitArray = fruitNames.toArray(new String[0]);
 
         // Get the selected fruits from SharedPreferences
@@ -226,36 +186,22 @@ public class FoodActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(FoodActivity.this);
         builder.setTitle("Select Food");
         builder.setCancelable(false);
-        builder.setMultiChoiceItems(fruitArray, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
-                String fruitName = fruitArray[which];
-                if (isChecked) {
-                    selectedFruitsSet.add(fruitName);
-                } else {
-                    selectedFruitsSet.remove(fruitName);
-                }
+        builder.setMultiChoiceItems(fruitArray, checkedItems, (dialogInterface, which, isChecked) -> {
+            String fruitName = fruitArray[which];
+            if (isChecked) {
+                selectedFruitsSet.add(fruitName);
+            } else {
+                selectedFruitsSet.remove(fruitName);
             }
-        }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                saveSelectedFruitsToPrefs();
-                updateSelectedFruitsTextView();
-                calculateTotalCalories();
-            }
-        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                dialogInterface.dismiss();
-            }
-        }).setNeutralButton("Clear all", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                selectedFruitsSet.clear();
-                saveSelectedFruitsToPrefs();
-                updateSelectedFruitsTextView();
-                calculateTotalCalories();
-            }
+        }).setPositiveButton("OK", (dialogInterface, which) -> {
+            saveSelectedFruitsToPrefs();
+            updateSelectedFruitsTextView();
+            calculateTotalCalories();
+        }).setNegativeButton("Cancel", (dialogInterface, which) -> dialogInterface.dismiss()).setNeutralButton("Clear all", (dialogInterface, which) -> {
+            selectedFruitsSet.clear();
+            saveSelectedFruitsToPrefs();
+            updateSelectedFruitsTextView();
+            calculateTotalCalories();
         });
         builder.show();
     }
@@ -273,36 +219,22 @@ public class FoodActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(FoodActivity.this);
         builder.setTitle("Select Meals");
         builder.setCancelable(false);
-        builder.setMultiChoiceItems(mealArray, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
-                String mealName = mealArray[which];
-                if (isChecked) {
-                    selectedMealsSet.add(mealName);
-                } else {
-                    selectedMealsSet.remove(mealName);
-                }
+        builder.setMultiChoiceItems(mealArray, checkedItems, (dialogInterface, which, isChecked) -> {
+            String mealName = mealArray[which];
+            if (isChecked) {
+                selectedMealsSet.add(mealName);
+            } else {
+                selectedMealsSet.remove(mealName);
             }
-        }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                saveSelectedMealsToPrefs();
-                updateSelectedMealsTextView();
-                calculateTotalCalories();
-            }
-        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                dialogInterface.dismiss();
-            }
-        }).setNeutralButton("Clear all", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                selectedMealsSet.clear();
-                saveSelectedMealsToPrefs();
-                updateSelectedMealsTextView();
-                calculateTotalCalories();
-            }
+        }).setPositiveButton("OK", (dialogInterface, which) -> {
+            saveSelectedMealsToPrefs();
+            updateSelectedMealsTextView();
+            calculateTotalCalories();
+        }).setNegativeButton("Cancel", (dialogInterface, which) -> dialogInterface.dismiss()).setNeutralButton("Clear all", (dialogInterface, which) -> {
+            selectedMealsSet.clear();
+            saveSelectedMealsToPrefs();
+            updateSelectedMealsTextView();
+            calculateTotalCalories();
         });
         builder.show();
     }
@@ -319,36 +251,22 @@ public class FoodActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(FoodActivity.this);
         builder.setTitle("Select Breakfast");
         builder.setCancelable(false);
-        builder.setMultiChoiceItems(breakfastArray, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
-                String breakfastName = breakfastArray[which];
-                if (isChecked) {
-                    selectedBreakfastSet.add(breakfastName);
-                } else {
-                    selectedBreakfastSet.remove(breakfastName);
-                }
+        builder.setMultiChoiceItems(breakfastArray, checkedItems, (dialogInterface, which, isChecked) -> {
+            String breakfastName = breakfastArray[which];
+            if (isChecked) {
+                selectedBreakfastSet.add(breakfastName);
+            } else {
+                selectedBreakfastSet.remove(breakfastName);
             }
-        }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                saveSelectedBreakfastToPrefs();
-                updateSelectedBreakfastTextView();
-                calculateTotalCalories();
-            }
-        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                dialogInterface.dismiss();
-            }
-        }).setNeutralButton("Clear all", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                selectedBreakfastSet.clear();
-                saveSelectedBreakfastToPrefs();
-                updateSelectedBreakfastTextView();
-                calculateTotalCalories();
-            }
+        }).setPositiveButton("OK", (dialogInterface, which) -> {
+            saveSelectedBreakfastToPrefs();
+            updateSelectedBreakfastTextView();
+            calculateTotalCalories();
+        }).setNegativeButton("Cancel", (dialogInterface, which) -> dialogInterface.dismiss()).setNeutralButton("Clear all", (dialogInterface, which) -> {
+            selectedBreakfastSet.clear();
+            saveSelectedBreakfastToPrefs();
+            updateSelectedBreakfastTextView();
+            calculateTotalCalories();
         });
         builder.show();
     }
@@ -368,36 +286,22 @@ public class FoodActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(FoodActivity.this);
         builder.setTitle("Select Sweets");
         builder.setCancelable(false);
-        builder.setMultiChoiceItems(sweetArray, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
-                String sweetName = sweetArray[which];
-                if (isChecked) {
-                    selectedSweetsSet.add(sweetName);
-                } else {
-                    selectedSweetsSet.remove(sweetName);
-                }
+        builder.setMultiChoiceItems(sweetArray, checkedItems, (dialogInterface, which, isChecked) -> {
+            String sweetName = sweetArray[which];
+            if (isChecked) {
+                selectedSweetsSet.add(sweetName);
+            } else {
+                selectedSweetsSet.remove(sweetName);
             }
-        }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                saveSelectedSweetsToPrefs();
-                updateSelectedSweetsTextView();
-                calculateTotalCalories();
-            }
-        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                dialogInterface.dismiss();
-            }
-        }).setNeutralButton("Clear all", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                selectedSweetsSet.clear();
-                saveSelectedSweetsToPrefs();
-                updateSelectedSweetsTextView();
-                calculateTotalCalories();
-            }
+        }).setPositiveButton("OK", (dialogInterface, which) -> {
+            saveSelectedSweetsToPrefs();
+            updateSelectedSweetsTextView();
+            calculateTotalCalories();
+        }).setNegativeButton("Cancel", (dialogInterface, which) -> dialogInterface.dismiss()).setNeutralButton("Clear all", (dialogInterface, which) -> {
+            selectedSweetsSet.clear();
+            saveSelectedSweetsToPrefs();
+            updateSelectedSweetsTextView();
+            calculateTotalCalories();
         });
         builder.show();
     }
