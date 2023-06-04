@@ -7,13 +7,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 
+import com.example.nutricount_07052023.Database.NoteEntity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NotesActivity extends AppCompatActivity {
     ImageButton imageButtonLogout, imageButtonPersonal;
+    private List<NoteEntity> noteList;
+    private NotesAdapter notesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +67,18 @@ public class NotesActivity extends AppCompatActivity {
                 showLogoutDialog();
             }
         });
+
+        ListView notesListView = findViewById(R.id.notesListView);
+
+        // Beispielhafte Daten für die Notizenliste
+        noteList = new ArrayList<NoteEntity>();
+        noteList.add(new NoteEntity("2023-01-02", "xxx", 100, 200, 300));
+        noteList.add(new NoteEntity("2023-02-03", "xxx", 150, 250, 350));
+        noteList.add(new NoteEntity("2023-05-05", "xxx", 120, 180, 320));
+
+        // Erstellen und Setzen des Adapters für den ListView
+        notesAdapter = new NotesAdapter(this, noteList);
+        notesListView.setAdapter(notesAdapter);
     }
     private void showLogoutDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
@@ -77,6 +95,5 @@ public class NotesActivity extends AppCompatActivity {
         alertDialog.setNegativeButton("No", null);
         alertDialog.show();
     }
-
 
     }

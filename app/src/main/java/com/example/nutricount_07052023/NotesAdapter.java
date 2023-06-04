@@ -1,7 +1,5 @@
 package com.example.nutricount_07052023;
 
-import static java.security.AccessController.getContext;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +10,15 @@ import android.widget.ArrayAdapter;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.ArrayList;
+import com.example.nutricount_07052023.Database.NoteEntity;
+
 import java.util.List;
 
 public class NotesAdapter extends ArrayAdapter {
 
     private Context context;
 
-    public NotesAdapter(Context context, List<Note> notes) {
+    public NotesAdapter(Context context, List<NoteEntity> notes) {
         super(context, 0, notes);
         this.context = context;
     }
@@ -31,7 +30,7 @@ public class NotesAdapter extends ArrayAdapter {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.activity_custom_notes_list, parent, false);
         }
 
-        Note currentNote = (Note) getItem(position);
+        NoteEntity currentNote = (NoteEntity) getItem(position);
 
         // Zeigen Sie die Eintragswerte in den entsprechenden Views an
         TextView allCaloriesTextView = convertView.findViewById(R.id.textView_notes_allCalories);
@@ -43,7 +42,7 @@ public class NotesAdapter extends ArrayAdapter {
             allCaloriesTextView.setText(String.valueOf(currentNote.getAllCalories()));
             burnedCaloriesTextView.setText(String.valueOf(currentNote.getBurnedCalories()));
             consumedCaloriesTextView.setText(String.valueOf(currentNote.getConsumedCalories()));
-            dateTextView.setText(currentNote.getDate().toString());
+            dateTextView.setText(currentNote.getDay().toString());
         }
 
         return convertView;
