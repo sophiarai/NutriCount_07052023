@@ -105,6 +105,9 @@ public class BottomNavActivity extends AppCompatActivity {
 
                 // Ergebnis anzeigen
                 diffTextView.setText("Total gained calories: " + result);
+
+                //Intent limitCalories = getIntent();
+               // double calorielimit = limitCalories.getDoubleExtra("calorieLimit");
             }
         });
 
