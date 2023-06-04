@@ -17,6 +17,10 @@ import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.nutricount_07052023.Database.NoteDao;
+import com.example.nutricount_07052023.Database.NoteDatabase;
+import com.example.nutricount_07052023.Database.NoteEntity;
+import com.example.nutricount_07052023.Database.UserDatabase;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -25,6 +29,7 @@ import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class BottomNavActivity extends AppCompatActivity {
@@ -37,6 +42,8 @@ public class BottomNavActivity extends AppCompatActivity {
     private static final String DIFF_PREF_KEY = "diff_calories";
     ImageButton imageButtonPersonal, imageButtonLogout;
     SharedPreferences sharedPreferences;
+
+    NoteDatabase noteDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +78,8 @@ public class BottomNavActivity extends AppCompatActivity {
         String username = getIntent().getStringExtra("USERNAME");
         textView_welcome.setText("Welcome " + username + "!");
 
+        noteDatabase = NoteDatabase.getNoteDatabase(this);
+
         // Willkommensnachricht aus den SharedPreferences abrufen und anzeigen
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -102,6 +111,7 @@ public class BottomNavActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d("ButtonClick", "Button submit clicked");
+                /*
                 // Gesamtkalorien (gained) aus den SharedPreferences abrufen
                 int gainedCalories = sharedPreferences.getInt("totalCalories", 0);
                 // Gesamtkalorien (lost) aus den SharedPreferences abrufen
@@ -117,6 +127,7 @@ public class BottomNavActivity extends AppCompatActivity {
                 editor.apply();
                 // Hole den gespeicherten Wert des Kalorienlimits aus den SharedPreferences
                 SharedPreferences prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
+
                 float calorieLimit = prefs.getFloat("calorieLimit", 0.0f);
                 // Überprüfen, ob die gesammelten Kalorien die Kaloriengrenze überschreiten
                 if (result > calorieLimit) {
@@ -128,7 +139,10 @@ public class BottomNavActivity extends AppCompatActivity {
                     builder.create().show();
                 } else {
                     // Wenn das Ergebnis nicht größer als die Kaloriengrenze ist, wird kein AlertDialog angezeigt
-                }}});
+                 */
+
+                submitCalories();
+                }});
 
         // Wiederherstellen des gespeicherten Werts für das diffTextView
         int savedResult = sharedPreferences.getInt(DIFF_PREF_KEY, 0);
@@ -172,6 +186,38 @@ public class BottomNavActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
+
+    private void submitCalories ()
+    {
+        NoteEntity note;
+        NoteDao noteDao = noteDatabase.getNoteDao();
+/*
+        // Gesamtkalorien (gained) aus den SharedPreferences abrufen
+        int gainedCalories = sharedPreferences.getInt("totalCalories", 0);
+
+        // Gesamtkalorien (lost) aus den SharedPreferences abrufen
+        String sTotalCaloriesSport = sharedPreferences.getString("total_calories_sport", "");
+        int lostCalories = Integer.parseInt(sTotalCaloriesSport);
+*/
+
+        String date = dateEditText.getText().toString();
+        List<NoteEntity> list = noteDao.getNotesByUserDay("xxx", date);
+
+        if (list.isEmpty())
+        {
+            int gainedCalories = 999;
+            int lostCalories = 666;
+            // public NoteEntity (String day, String username, int allCalories, int burnedCalories, int consumedCalories)
+            note = new NoteEntity(date, "xxx", gainedCalories - lostCalories, lostCalories, gainedCalories);
+
+            noteDao.insertNote(note);
+        }
+        else {
+            // TODO: Fehler ausgeben
+            Log.d("ActivityLifecycle", "Für User " + "'xxx'" + " und Datum=" + date + " existiert bereits ein Eintrag");
+
+        }
     }
 
     private void showLogoutDialog() {

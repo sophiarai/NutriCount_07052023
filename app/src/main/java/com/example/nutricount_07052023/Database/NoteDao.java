@@ -4,6 +4,8 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import java.util.List;
+
 @Dao
 public interface NoteDao {
 
@@ -11,8 +13,8 @@ public interface NoteDao {
     void insertNote (NoteEntity noteEntity);
 
     @Query("SELECT * FROM notes WHERE username = :username")
-    NoteEntity getNotesByUser (String username);
+    List<NoteEntity> getNotesByUser (String username);
 
     @Query("SELECT * FROM notes WHERE username = :username AND day = :day")
-    NoteEntity getNotesByUserDay (String username, String day);
+    List<NoteEntity> getNotesByUserDay (String username, String day);
 }
