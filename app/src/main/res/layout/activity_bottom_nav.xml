@@ -102,51 +102,28 @@
         android:contentDescription="@string/app_name"
         android:minHeight="48dp"
         app:srcCompat="@drawable/ic_personblack"
-        tools:ignore="DuplicateSpeakableTextCheck" />
+        tools:ignore="DuplicateSpeakableTextCheck"
+        android:backgroundTint="@color/white"/>
 
     <ImageButton
         android:id="@+id/imageButton_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btnPersonal"
+        android:layout_toEndOf="@id/btnPersonal"
         android:contentDescription="@string/app_name"
         android:minHeight="48dp"
+        android:backgroundTint="@color/white"
         app:srcCompat="@drawable/ic_logout" />
 
-<!--
-    <TextView
-        android:id="@+id/textView_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
-        android:layout_alignParentTop="false"
-        android:paddingStart="20dp"
-        android:paddingTop="20dp"
-        android:text="Today's date:"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        tools:ignore="RtlSymmetry" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView_date2"
-        android:textColor="@color/white"
-        android:textSize="30sp"
-        android:layout_centerHorizontal="true"
-        android:textStyle="bold|italic"
-        android:layout_below="@+id/textView_date"/>
--->
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/dateInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:layout_marginStart="100dp"
+        android:layout_marginTop="110dp"
+        android:layout_marginStart="110dp"
         android:layout_marginEnd="100dp"
         app:boxBackgroundColor="@color/green"
         android:hint="Select Date"

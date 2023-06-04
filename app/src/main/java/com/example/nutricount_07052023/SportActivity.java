@@ -3,8 +3,9 @@ package com.example.nutricount_07052023;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
-import android.content.Context;
-import android.content.DialogInterface;
+
+
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
@@ -13,11 +14,10 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.example.nutricount_07052023.Database.SportDao;
 import com.example.nutricount_07052023.Database.SportDatabase;
 import com.example.nutricount_07052023.Database.SportEntity;
@@ -26,9 +26,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import org.json.JSONArray;
 import org.json.JSONException;
-import java.util.ArrayList;
-import java.util.List;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 
 public class SportActivity extends AppCompatActivity implements SensorEventListener {
@@ -36,17 +39,27 @@ public class SportActivity extends AppCompatActivity implements SensorEventListe
     private static final String PREF_SELECTED_SPORTS = "selected_sports";
     private static final String PREF_TOTAL_CALORIES_SPORT = "total_calories_sport";
     private static final String PREF_TEXT_VIEW_SPORT = "text_view_sport";
+    private static final String PREF_LAST_DATE = "last_date";
     private ArrayList<Integer> selectedSportsList;
     private int totalCalories;
     TextView textViewSport, textViewkcalSport, textViewSteps;
-    Button btnResetSteps;
+    //Button btnResetSteps;
     ImageButton imageButtonLogout, imageButtonPersonal;
     MaterialCardView selectCardSport;
     boolean[] selectedsport;
     private List<SportEntity> sports;
 
     private SensorManager sensorManager;
-    private boolean running = false;
+    private Sensor mStepCounter;
+    int stepCount=0;
+    private static final String PREF_STEP_COUNT = "step_count";
+
+
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,22 +68,23 @@ public class SportActivity extends AppCompatActivity implements SensorEventListe
 
         imageButtonLogout=findViewById(R.id.imageButton_logout);
         imageButtonPersonal = findViewById(R.id.btnPersonal);
-
-        btnResetSteps = findViewById(R.id.button_steps);
         textViewSteps = findViewById(R.id.tv_stepsTaken);
-
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        if (countSensor == null) {
-            Toast.makeText(this, "This device does not support step counting.", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "This device does support step counting.", Toast.LENGTH_SHORT).show();
-        }
-        btnResetSteps.setOnClickListener(view -> resetSteps());
-
         textViewkcalSport = findViewById(R.id.kcal_sport);
         selectCardSport = findViewById(R.id.selectCardSport);
         textViewSport = findViewById(R.id.tvSport);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        selectedSportsList = new ArrayList<>();
+
+
+
+
+        sensorManager=(SensorManager) getSystemService(SENSOR_SERVICE);
+        if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)!=null){
+            mStepCounter=sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        }else{
+            textViewSteps.setText("Counter Sensor is not Present");
+        }
 
         // Room Database initialisieren
         SportDatabase database = Room.databaseBuilder(getApplicationContext(), SportDatabase.class, "app-db")
@@ -90,26 +104,19 @@ public class SportActivity extends AppCompatActivity implements SensorEventListe
         }
         selectedsport = new boolean[sports.size()];
 
+
         selectCardSport.setOnClickListener(view -> showSportDialog());
 
-        // Wiederherstellen der gespeicherten Daten aus SharedPreferences
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        selectedSportsList = getSelectedSportsListFromPrefs(sharedPreferences);
-        totalCalories = sharedPreferences.getInt(PREF_TOTAL_CALORIES_SPORT, 0);
-        textViewSport.setText(sharedPreferences.getString(PREF_TEXT_VIEW_SPORT, ""));
-        textViewkcalSport.setText("Lost calories: " + totalCalories);
 
 
-        imageButtonPersonal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SportActivity.this, PersonalActivity.class);
-                startActivity(intent);
-            }
+
+
+        imageButtonPersonal.setOnClickListener(view -> {
+            Intent intent = new Intent(SportActivity.this, PersonalActivity.class);
+            startActivity(intent);
         });
 
         // BottomNavigation wird in SportActivity angezeigt:
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.bottom_sport);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -135,24 +142,16 @@ public class SportActivity extends AppCompatActivity implements SensorEventListe
             return false;
         });
 
-        imageButtonLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showLogoutDialog();
-            }
-        });
+        imageButtonLogout.setOnClickListener(view -> showLogoutDialog());
     }
     private void showLogoutDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("LogOut");
         alertDialog.setMessage("Do you really want to Logout?");
-        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(SportActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        alertDialog.setPositiveButton("Yes", (dialog, which) -> {
+            Intent intent = new Intent(SportActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         });
         alertDialog.setNegativeButton("No", null);
         alertDialog.show();
@@ -222,17 +221,12 @@ public class SportActivity extends AppCompatActivity implements SensorEventListe
         totalCalories = totalCalories2;
     }
 
+
     private int calculateTotalCalories() {
         int totalCalories = 0;
         for (int sportIndex : selectedSportsList) {
             totalCalories += sports.get(sportIndex).getCalories();
         }
-        // Anzahl der Schritte abrufen und in die Kalorienberechnung einbeziehen
-        int stepCount = Integer.parseInt(textViewSteps.getText().toString());
-        int caloriesPerStep = 0; // Setze hier den Kalorienverbrauch pro Schritt
-        int caloriesFromSteps = stepCount * caloriesPerStep;
-        // Addiere Kalorienverbrauch aus den Schritten zu den Gesamtkalorien
-        totalCalories += caloriesFromSteps;
 
         return totalCalories;
     }
@@ -240,59 +234,47 @@ public class SportActivity extends AppCompatActivity implements SensorEventListe
     @Override
     protected void onPause() {
         super.onPause();
-        running=false;
-        sensorManager.unregisterListener(this);
+        if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)!=null)
+            sensorManager.unregisterListener(this,mStepCounter);
 
-        // Speichern des aktuellen Zustands in SharedPreferences
+        // Speichern des aktuellen Kalorienwerts in SharedPreferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(PREF_SELECTED_SPORTS, convertListToString(selectedSportsList));
-        editor.putInt(PREF_TOTAL_CALORIES_SPORT, totalCalories);
         editor.putString(PREF_TEXT_VIEW_SPORT, textViewSport.getText().toString());
+        editor.putString(PREF_TOTAL_CALORIES_SPORT, textViewkcalSport.getText().toString());
         editor.apply();
+
+
     }
     @Override
     protected void onResume() {
         super.onResume();
-        running=true;
-        Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        if (countSensor != null) {
-            sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
-        } else {
-            Toast.makeText(this, "Sensor not found!", Toast.LENGTH_SHORT).show();
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null) {
+            sensorManager.registerListener(this, mStepCounter, SensorManager.SENSOR_DELAY_NORMAL);
         }
 
-        // Wiederherstellen des gespeicherten Zustands aus SharedPreferences
+        // Wiederherstellen des gespeicherten Schrittzählerwerts aus SharedPreferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        selectedSportsList = getSelectedSportsListFromPrefs(sharedPreferences);
-        totalCalories = sharedPreferences.getInt(PREF_TOTAL_CALORIES_SPORT, 0);
-        textViewSport.setText(sharedPreferences.getString(PREF_TEXT_VIEW_SPORT, ""));
-        textViewkcalSport.setText("Lost calories: " + totalCalories);
+        stepCount = sharedPreferences.getInt(PREF_STEP_COUNT, 0);
+        textViewSteps.setText(String.valueOf(stepCount));
 
+        // Wiederherstellen des gespeicherten Sport-Texts aus SharedPreferences
+        String sportText = sharedPreferences.getString(PREF_TEXT_VIEW_SPORT, "");
+        textViewSport.setText(sportText);
+
+        // Wiederherstellen des gespeicherten Kalorienwerts aus SharedPreferences
+        int calories = sharedPreferences.getInt("total_calories", 0);
+        String caloriesText = String.valueOf(calories);
+        textViewkcalSport.setText(caloriesText);
 
         // Aktualisiert den Zustand der ausgewählten Sportarten im Dialogfenster
         if (selectedSportsList != null) {
             for (int sportIndex : selectedSportsList) {
                 if (sportIndex >= 0 && sportIndex < selectedsport.length) {
                     selectedsport[sportIndex] = true;
-                }}}
-    }
-
-    private ArrayList<Integer> getSelectedSportsListFromPrefs(SharedPreferences sharedPreferences) {
-        String selectedSportsJson = sharedPreferences.getString(PREF_SELECTED_SPORTS, null);
-        if (selectedSportsJson != null) {
-            try {
-                JSONArray jsonArray = new JSONArray(selectedSportsJson);
-                ArrayList<Integer> selectedSportsList = new ArrayList<>();
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    selectedSportsList.add(jsonArray.getInt(i));
                 }
-                return selectedSportsList;
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
         }
-        return new ArrayList<>();
     }
 
     private String convertListToString(List<Integer> list) {
@@ -303,20 +285,30 @@ public class SportActivity extends AppCompatActivity implements SensorEventListe
         return jsonArray.toString();
     }
 
-    private void resetSteps() {
-        textViewSteps.setText("0");
-    }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // Hier kann entsprechend auf Veränderungen der Genauigkeit reagiert werden
-    }
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        if(sensorEvent.sensor == mStepCounter) {
+            int previousStepCount = stepCount;
+            stepCount = (int) sensorEvent.values[0];
+            textViewSteps.setText(String.valueOf(stepCount));
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (running) {
-            textViewSteps.setText(String.valueOf(event.values[0]));
-            updateTotalCalories();
+
+            textViewkcalSport.setText("Lost calories: " + totalCalories);
+
+            // Speichern des geänderten Gesamtkalorienwerts in SharedPreferences
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(PREF_TOTAL_CALORIES_SPORT, totalCalories);
+            editor.apply();
+
+
         }
     }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
+
 }

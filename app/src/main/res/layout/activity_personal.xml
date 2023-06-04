@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
+        android:drawableStart="@drawable/ic_height"
         android:background="@drawable/input_bg"
         android:hint="Größe in cm"
         android:inputType="numberDecimal"
@@ -35,6 +36,7 @@
 
     <EditText
         android:id="@+id/inputGewicht"
+        android:drawableStart="@drawable/ic_weight"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -101,6 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Männlich"
+            android:drawableStart="@drawable/ic_male"
             android:textColor="@color/white"
             android:textStyle="bold" />
 
@@ -108,6 +111,7 @@
             android:id="@+id/femaleRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_female"
             android:text="Weiblich"
             android:textColor="@color/white"
             android:textStyle="bold" />
@@ -119,17 +123,7 @@
             android:text="Andere"
             android:textColor="@color/white"
             android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/btnSubmit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/green"
-            android:text="Submit"
-            android:textSize="9sp"
-            android:textStyle="bold"
-            tools:ignore="TextSizeCheck,TouchTargetSizeCheck,VisualLintBounds" />
-    </RadioGroup>
+</RadioGroup>
 
     <TextView
         android:id="@+id/bmiTextView"
@@ -145,13 +139,13 @@
         app:layout_constraintTop_toBottomOf="@+id/genderRadioGroup" />
 
 
-    <EditText
+    <TextView
         android:id="@+id/inputKaloriengrenze"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/input_bg"
-        android:hint="calorie limit"
+        android:hint="Calorie limit per Day"
         android:inputType="numberDecimal"
         android:minHeight="48dp"
         android:paddingStart="20dp"
@@ -185,7 +179,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/green"
-        android:drawableLeft="@drawable/ic_arrowback"
+        android:drawableStart="@drawable/ic_arrowback"
         android:fontFamily="sans-serif-black"
         android:textColor="@color/white"
         android:text="Back"
@@ -201,7 +195,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:backgroundTint="@color/green"
-        android:text="calories"
+        android:text="Submit"
         android:textSize="15sp"
         android:textStyle="bold"
         android:textColor="@color/white"
