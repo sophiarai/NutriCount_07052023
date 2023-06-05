@@ -1,18 +1,15 @@
 package com.example.nutricount_07052023;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 public class Note {
 
-    private String date;
+    private String day;
 
     private String allCalories;
     private String burnedCalories;
     private String consumedCalories;
 
-    public Note(String date,String allCalories, String burnedCalories, String consumedCalories) {
-        this.date = date;
+    public Note(String date, String allCalories, String burnedCalories, String consumedCalories) {
+        this.day = date;
         this.allCalories = allCalories;
         this.burnedCalories = burnedCalories;
         this.consumedCalories = consumedCalories;
@@ -34,12 +31,12 @@ public class Note {
         this.consumedCalories = consumedCalories;
     }
 
-    public String getDate() {
-        return date;
+    public String getDay() {
+        return day;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDay(String day) {
+        this.day = day;
     }
 
     public String getAllCalories() {

@@ -150,6 +150,9 @@ public class PersonalActivity extends AppCompatActivity {
 
         double calorieLimit = bmr * 1.2; // multiply BMR by 1.2 to get calorie limit
 
+        //Intent limitCalories = new Intent(this, BottomNavActivity.class);
+        //limitCalories.putExtra("calorieLimit", calorieLimit);
+
         textViewKaloriengrenze.setText("calorie limit per day: " + String.format("%.0f", calorieLimit) );
         textViewKaloriengrenze.setVisibility(View.VISIBLE);
 
